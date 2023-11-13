@@ -1,0 +1,8 @@
+.card {
+  display: block;
+  width: 80px;
+  aspect-ratio: 2.5 / 3.5;
+  overflow: hidden;
+  border: 1px solid black;
+  border-radius: .3rem;
+}
