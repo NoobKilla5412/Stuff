@@ -1,3 +1,3 @@
-class POptions {
+class ListOptions {
   public constructor() {}
 }
