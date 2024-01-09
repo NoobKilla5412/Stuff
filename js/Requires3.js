@@ -262,7 +262,6 @@
      * @returns {Promise<void>}
      */
     async function getScript(path) {
-      writeLn(path);
       return Promise.race([
         /** @type {Promise<void>} */ (
           new Promise((resolve) => {
@@ -271,7 +270,7 @@
             elem.onload = () => {
               resolve();
             };
-            elem.src = path;
+            elem.src = "https://noobkilla5412.github.io/Stuff" + path;
             document.body.appendChild(elem);
           })
         ),
