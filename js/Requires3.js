@@ -220,6 +220,7 @@
   global.normalizePath = normalizePath;
 
   const defaultBasePath = joinPath(location.pathname, "..");
+  writeLn(defaultBasePath);
 
   try {
     /**
