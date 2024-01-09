@@ -287,8 +287,6 @@ define(async function (req, exports, module, args) {
         } else if (e.key == "i") {
           importJSON();
         }
-      } else if (e.key == "o") {
-        importMD();
       }
     } catch (e) {
       console.error(e);
