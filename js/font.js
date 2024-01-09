@@ -5,29 +5,29 @@ define(async (req, _, module, args) => {
 
   const letters = {
     A: "/\\",
-    B: "ᗷ",
-    C: "⼕",
+    B: "B",
+    C: "C",
     D: "|)",
-    E: "∈",
-    F: "Ƒ",
-    G: "Ꮆ",
+    E: "E",
+    F: "F",
+    G: "G",
     H: "|-|",
-    I: "I",
+    I: "|",
     J: "\\_|",
-    K: "K",
+    K: "|/_\\^",
     L: "|\\_",
     M: "/\\/\\",
     "N(?!bsp)": "|\\|",
-    O: "0",
+    O: "()",
     "(?<!nbs)P": "|^)\\_",
-    Q: "Q",
-    R: "ᖇ",
-    S: "⟆",
-    T: "T",
+    Q: "()_\\^",
+    R: "R",
+    S: "S",
+    T: "^-\\_|^-\\_",
     U: "|\\_|",
     V: "\\/",
     W: "\\/\\/",
-    X: "ⵋ",
+    X: "X",
     Y: "^\\\\_/",
     Z: "Z",
 
@@ -59,6 +59,7 @@ define(async (req, _, module, args) => {
       })
       .run();
   }
+  exports.font = font;
 
   exports.test = function () {
     return overload(arguments, [], () => {

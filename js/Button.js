@@ -3,27 +3,48 @@
 define(async function (req, module, args) {
   const { createElement } = await req("./HTMLUtils");
   const overload = await req("./overload");
+  const { typedef, isType } = await req("./typeUtils");
+
+  typedef("Listeners", "{ onclick?: function; onrightclick?: function }");
 
   let id = 0;
 
   this.ButtonRef = overload()
-    .add(["string", "Function"], (name, onclick) => {
-      return this.ButtonRef("button", name, onclick);
+    .add(["string", "Listeners"], (name, listeners) => {
+      return this.ButtonRef("button", name, listeners);
     })
-    .add(["string", "Function", "Function"], (name, onclick, cb) => {
-      const btn = this.ButtonRef("button", name, onclick);
+    .add(["string", "Listeners", "function"], (name, listeners, cb) => {
+      const btn = this.ButtonRef("button", name, listeners);
       cb(btn);
       return btn;
     })
-    .add(["string", "string", "Function"], (type, name, onclick) => {
+    .add(["string", "string", "Listeners"], (type, name, listeners) => {
+      /**
+       * @type {HTMLElement}
+       */
       const btn = createElement(type);
+      btn.style.width = "fit-content";
       btn.innerHTML = name;
-      btn.addEventListener("click", () => {
-        onclick();
-      });
+      if (isType(listeners.onclick, "function"))
+        btn.addEventListener("click", () => {
+          try {
+            listeners.onclick();
+          } catch (e) {
+            console.error(e);
+          }
+        });
+      if (isType(listeners.onrightclick, "function"))
+        btn.addEventListener("contextmenu", (e) => {
+          try {
+            e.preventDefault();
+            listeners.onrightclick();
+          } catch (e) {
+            console.error(e);
+          }
+        });
       return btn;
     })
-    .add(["string", "string", "Function", "Function"], (type, name, onclick, cb) => {
+    .add(["string", "string", "Listeners", "function"], (type, name, listeners, cb) => {
       const btn = this.ButtonRef(type, name, onclick);
       cb(btn);
       return btn;
@@ -31,41 +52,42 @@ define(async function (req, module, args) {
     .compile();
 
   this.Button = overload()
-    .add(["string", "Function"], (name, onclick) => {
-      return document.body.appendChild(this.ButtonRef("button", name, onclick));
+    .add(["any", "string", "Listeners"], (element, name, listeners) => {
+      return element.appendChild(this.ButtonRef("button", name, listeners));
     })
-    .add(["string", "Function", "Function"], (name, onclick, cb) => {
-      const btn = this.ButtonRef("button", name, onclick, cb);
-      document.body.appendChild(btn);
-      return btn;
-    })
-    .add(["string", "string", "Function"], (type, name, onclick) => {
-      const btn = this.ButtonRef(type, name, onclick);
-      document.body.appendChild(btn);
-      return btn;
-    })
-    .add(["string", "string", "Function", "Function"], (type, name, onclick, cb) => {
-      const btn = this.ButtonRef(type, name, onclick, cb);
-      document.body.appendChild(btn);
-      return btn;
-    })
-    .add(["any", "string", "Function"], (element, name, onclick) => {
-      return element.appendChild(this.ButtonRef("button", name, onclick));
-    })
-    .add(["any", "string", "Function", "Function"], (element, name, onclick, cb) => {
-      const btn = this.ButtonRef("button", name, onclick, cb);
+    .add(["any", "string", "Listeners", "function"], (element, name, listeners, cb) => {
+      const btn = this.ButtonRef("button", name, listeners, cb);
       element.appendChild(btn);
       return btn;
     })
-    .add(["any", "string", "string", "Function"], (element, type, name, onclick) => {
-      const btn = this.ButtonRef(type, name, onclick);
+    .add(["any", "string", "string", "Listeners"], (element, type, name, listeners) => {
+      const btn = this.ButtonRef(type, name, listeners);
       element.appendChild(btn);
       return btn;
     })
-    .add(["any", "string", "string", "Function", "Function"], (element, type, name, onclick, cb) => {
-      const btn = this.ButtonRef(type, name, onclick, cb);
+    .add(["any", "string", "string", "Listeners", "function"], (element, type, name, listeners, cb) => {
+      const btn = this.ButtonRef(type, name, listeners, cb);
       element.appendChild(btn);
       return btn;
     })
+    .add(["string", "Listeners"], (name, listeners) => {
+      return document.body.appendChild(this.ButtonRef("button", name, listeners));
+    })
+    .add(["string", "Listeners", "function"], (name, listeners, cb) => {
+      const btn = this.ButtonRef("button", name, listeners, cb);
+      document.body.appendChild(btn);
+      return btn;
+    })
+    .add(["string", "string", "Listeners"], (type, name, listeners) => {
+      const btn = this.ButtonRef(type, name, listeners);
+      document.body.appendChild(btn);
+      return btn;
+    })
+    .add(["string", "string", "Listeners", "function"], (type, name, listeners, cb) => {
+      const btn = this.ButtonRef(type, name, listeners, cb);
+      document.body.appendChild(btn);
+      return btn;
+    })
+
     .compile();
 });

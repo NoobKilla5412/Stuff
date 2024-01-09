@@ -1,9 +1,16 @@
-define(async (req, exports, module, args) => {
-  "use strict";
-  const overload = await req("./overload");
-  const { typedef, assignType, isType } = await req("./typeUtils");
+// @ts-check
 
-  module.exports = overload()
-    .add("HTMLElement", () => {})
+define(async function (req, exports, module, args) {
+  const asyncOverload = await req("./asyncOverload");
+  const { createElement } = await req("./HTMLUtils");
+
+  this.Input = asyncOverload()
+    .add([], async () => {
+      const elem = createElement("input");
+
+      return () => {
+        return elem.value;
+      };
+    })
     .compile();
 });

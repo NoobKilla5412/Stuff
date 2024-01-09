@@ -32,4 +32,15 @@ define(async function (req, module, args) {
       return element;
     })
     .compile();
+
+  this.br = overload()
+    .add([], () => {
+      this.createElement("br", true);
+    })
+    .compile();
+  this.brRef = overload()
+    .add([], () => {
+      this.createElement("br");
+    })
+    .compile();
 });

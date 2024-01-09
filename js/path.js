@@ -22,7 +22,7 @@ define(async (req, exports, module) => {
 
   "use strict";
 
-  var isWindows = process.platform === "win32";
+  var isWindows = false;
   var util = await req("./util");
 
   // resolves . and .. elements in a path array with directory names there

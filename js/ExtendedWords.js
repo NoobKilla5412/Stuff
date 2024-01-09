@@ -1,13 +1,13 @@
 define(async (req, exports) => {
-  // const Dictionary_1 = await req("./Dictionary.js");
-  const spell = await req("spell");
-  const overload = await req("overload.js");
+  const Dictionary_1 = await req("./Dictionary.js");
+  const spell = await req("./spell");
+  const overload = await req("./overload.js");
 
   let dict = spell({
     get: function () {
-      // if (window.localStorage.getItem("dict") == null) {
-      //   window.localStorage.setItem("dict", JSON.stringify(Dictionary_1.words));
-      // }
+      if (window.localStorage.getItem("dict") == null) {
+        window.localStorage.setItem("dict", JSON.stringify(Dictionary_1.words));
+      }
       return JSON.parse(window.localStorage.getItem("dict"));
     },
     store: function (dict, after_store) {

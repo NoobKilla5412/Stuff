@@ -1,10 +1,9 @@
 define(async (req, exports, module, args) => {
-  const overload = await req("overload.js");
-  const { isType, getType, toString, fromString, unionTypeHas, equals, format } = req("typeUtils");
+  const { test, font } = await req("font");
+  //const overload = await req("overload.js");
+  //const { isType, getType, toString, fromString, unionTypeHas, equals } = req("./typeUtils");
 
-  keepOpen();
-
-  writeObj(toString("({} | string)[]"));
-
-  writeLn(`<pre></pre>`);
+  //writeObj(toString(fromString("({} | string)[]")));
+  test();
+  //writeLn(font("hello, can you read this?"));
 });

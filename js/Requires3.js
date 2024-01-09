@@ -1,6 +1,6 @@
 // @ts-check
 
-((global) => {
+(async (global) => {
   /**
    * @param {{toString(): string}} text
    */
@@ -129,14 +129,17 @@
 
   const sleep = async (/** @type {number=} */ ms) => new Promise((resolve) => setTimeout(resolve, ms));
   global.sleep = sleep;
-  const rejectSleep = async (/** @type {number=} */ ms, /** @type {string=} */ msg = "timeout") => new Promise((_, reject) => setTimeout(reject, ms, msg));
+  const rejectSleep = async (/** @type {number=} */ ms, /** @type {string=} */ msg = "timeout") =>
+    new Promise((_, reject) => setTimeout(reject, ms, msg));
   global.rejectSleep = rejectSleep;
 
   async function createStyle() {
     return Promise.race([
       /** @type {Promise<void>} */ (
         new Promise((resolve) => {
-          const style = /** @type {HTMLLinkElement} */ (document.getElementById(styleName) || document.head.appendChild(document.createElement("link")));
+          const style = /** @type {HTMLLinkElement} */ (
+            document.getElementById(styleName) || document.head.appendChild(document.createElement("link"))
+          );
           style.rel = "stylesheet";
           style.id = styleName;
           style.href = joinPath(defaultBasePath, "js/Requires3.css");
@@ -274,7 +277,7 @@
             document.body.appendChild(elem);
           })
         ),
-        rejectSleep(100, `Could not load module "${path}" due to timeout. Check if the file exists.`)
+        rejectSleep(1000, `Could not load module "${path}" due to timeout. Check if the file exists.`)
       ]);
     }
 
@@ -296,6 +299,7 @@
       return /** @type {Promise<void>} */ (
         new Promise(async (resolve, reject) => {
           try {
+            let originalPath = currentImportPath;
             if (currentImportPath != path) {
               currentImportPath = joinPath(currentImportPath, path);
             }
@@ -333,6 +337,7 @@
               if (typeof res == "object" && res) Object.assign(modules[path].exports, res);
               else modules[path].exports = res;
             }
+            currentImportPath = originalPath;
             resolve();
           } catch (e) {
             reject(e?.stack || e);
@@ -348,22 +353,14 @@
       if (!document.title) {
         document.title = name;
       }
-      currentImportPath = joinPath(currentImportPath, name);
       try {
-        await Run(currentImportPath);
+        await Run("js/fileBrowser");
+        await Run(name);
       } catch (e) {
         console.error(e);
       }
     }
     global.init = init;
-
-    /**
-     * @param {string} name
-     */
-    function createElement(name) {
-      return document.body.appendChild(document.createElement(name));
-    }
-    global.createElement = createElement;
 
     /**
      * @param {string} str
@@ -431,36 +428,6 @@
       );
     }
     global.toRequires = toRequires;
-
-    // File browser
-
-    addEventListener("DOMContentLoaded", () => {
-      let file = location.href.split(defaultBasePath)[1].split("?")[0].slice(1);
-      if (file != "_loadJS.html") addHistory(url);
-      else addHistory(new URL(location.href).searchParams.get("file"));
-    });
-
-    /**
-     * @param {string} url
-     */
-    function addHistory(url) {
-      url = decodeURIComponent(url);
-      if (url.startsWith("/")) url = url.slice(1);
-      if (!history.includes(url) && !url.endsWith("?fileSelect=")) history.push(url);
-      setHistory();
-    }
-
-    function setHistory() {
-      history.sort((a, b) => a.localeCompare(b));
-      localStorage.setItem("fileHistory", JSON.stringify(history));
-    }
-
-    /**
-     * @type {string[]}
-     */
-    let history = JSON.parse(localStorage.getItem("fileHistory")) || [];
-
-    let openActive = false;
   } catch (e) {
     console.error(e);
   }

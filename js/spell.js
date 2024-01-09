@@ -1,4 +1,4 @@
-define(async (req, exports, module) => {
+define(async function (req, exports, module) {
   /* javascript spell checker based on
    *  http://norvig.com/spell-correct.html
    *
@@ -174,7 +174,7 @@ define(async (req, exports, module) => {
         }
       }
 
-      /*
+      /**
        * add word
        *
        * loads a word into the dictionary
@@ -182,14 +182,10 @@ define(async (req, exports, module) => {
        * e.g.
        * spell.insert_word('dog', 5);
        *
-       * @param {word:string:required}
-       *        the word you want to add
-       * @param {opts.count:int:optional}
-       *        the number of times the word appears in a text, defaults to one
-       * @param {opts.store:boolean:optional}
-       *        decide if you want to use storage
-       * @param {opts.done:function:optional}
-       *        function to call back when store is done
+       * @param {string} word the word you want to add
+       * @param {opts.count:int:optional} the number of times the word appears in a text, defaults to one
+       * @param {opts.store:boolean:optional} decide if you want to use storage
+       * @param {opts.done:function:optional} function to call back when store is done
        *
        * @return void
        */
@@ -214,7 +210,7 @@ define(async (req, exports, module) => {
        * removes word from the dictionary
        *
        * e.g.
-       * spell.remove_word('dog');
+       * `spell.remove_word('dog');`
        *
        * @param {word:string:required}
        *        the word you want to add
@@ -346,9 +342,9 @@ define(async (req, exports, module) => {
     spell._previous = previous_spell;
     if (typeof exports !== "undefined") {
       // nodejs
-      spell.platform = { name: "node.js", version: process.version };
+      spell.platform = { name: "node.js", version: "" };
       // spell.version = JSON.parse(require("fs").readFileSync(__dirname + "/package.json")).version;
-      spell.path = __dirname;
+      // spell.path = __dirname;
       if (typeof module !== "undefined" && module.exports) {
         exports = module.exports = spell;
       }
