@@ -1,3 +1,0 @@
-class POptions {
-  public constructor() {}
-}
