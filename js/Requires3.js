@@ -220,7 +220,6 @@
   global.normalizePath = normalizePath;
 
   const defaultBasePath = joinPath(location.pathname, "..");
-  writeLn(defaultBasePath);
 
   try {
     /**
@@ -348,6 +347,7 @@
      * @param {string} name
      */
     async function init(name) {
+      writeLn(defaultBasePath);
       if (!document.title) {
         document.title = name;
       }
