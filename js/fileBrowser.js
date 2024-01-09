@@ -6,7 +6,7 @@ define(async function (req, exports, module, args) {
 
   addEventListener("DOMContentLoaded", () => {
     let file = location.href.split(defaultBasePath)[1].split("?")[0].slice(1);
-    if (file != "_loadJS.html") addHistory(url);
+    if (file != "index.html") addHistory(url);
     else addHistory(new URL(location.href).searchParams.get("file"));
   });
 
@@ -170,7 +170,7 @@ define(async function (req, exports, module, args) {
   function loadFile(file) {
     if (file) {
       addHistory(file);
-      location.href = joinPath(currentImportPath, `_loadJS.html?file=${encodeURIComponent(file)}`);
+      location.href = joinPath(currentImportPath, `index.html?file=${encodeURIComponent(file)}`);
     }
   }
 
