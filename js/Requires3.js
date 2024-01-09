@@ -129,17 +129,14 @@
 
   const sleep = async (/** @type {number=} */ ms) => new Promise((resolve) => setTimeout(resolve, ms));
   global.sleep = sleep;
-  const rejectSleep = async (/** @type {number=} */ ms, /** @type {string=} */ msg = "timeout") =>
-    new Promise((_, reject) => setTimeout(reject, ms, msg));
+  const rejectSleep = async (/** @type {number=} */ ms, /** @type {string=} */ msg = "timeout") => new Promise((_, reject) => setTimeout(reject, ms, msg));
   global.rejectSleep = rejectSleep;
 
   async function createStyle() {
     return Promise.race([
       /** @type {Promise<void>} */ (
         new Promise((resolve) => {
-          const style = /** @type {HTMLLinkElement} */ (
-            document.getElementById(styleName) || document.head.appendChild(document.createElement("link"))
-          );
+          const style = /** @type {HTMLLinkElement} */ (document.getElementById(styleName) || document.head.appendChild(document.createElement("link")));
           style.rel = "stylesheet";
           style.id = styleName;
           style.href = joinPath(defaultBasePath, "js/Requires3.css");
@@ -354,7 +351,7 @@
         document.title = name;
       }
       try {
-        await Run("js/fileBrowser");
+        await Run("./js/fileBrowser");
         await Run(name);
       } catch (e) {
         console.error(e);
