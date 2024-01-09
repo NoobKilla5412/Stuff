@@ -1,3 +1,1 @@
-define(async (req, exports, module, args) => {
-  exports.hi = "string";
-});
+define(async (req, exports, module, args) => {});

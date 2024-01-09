@@ -2,20 +2,19 @@
 
 define(async function (req, exports, module, args) {
   const { Button, ButtonRef } = await req("./js/Button");
-  const { createElement, br } = await req("./js/HTMLUtils");
+  const { createElement } = await req("./js/HTMLUtils");
   const { renderToString: renderMath } = await req("./js/MathUtils");
   const { typedef, isType, checkType } = await req("./js/typeUtils");
+  const { openGUI, prompt } = await req("./js/GUI");
   const overload = await req("./js/overload");
   // const { open } = await req("./js/Menu");
 
+  // localStorage.clear();
   const newLine = " $ \\\\ $ ";
   const newLineRegex = / \$ *\\\\ *\$ /g;
 
   const viewport = createElement("div", true);
   const btns = createElement("div", true);
-  br();
-  const exportBox = createElement("textarea", true);
-  exportBox.wrap = "off";
 
   /**
    * @typedef Reason
@@ -230,19 +229,19 @@ define(async function (req, exports, module, args) {
     return { name, res };
   }
 
-  function importMD() {
-    const data = prompt("Enter markdown table");
+  async function importMD() {
+    const data = await prompt("Enter markdown table");
     if (data) {
       let { name, res } = parseMD(data);
-      if (!name) name = prompt("Enter a name") || "";
+      if (!name) name = (await prompt("Enter a name")) || "";
 
       proofs.push(res);
       currentProofID = proofs.length - 1;
       saveProofs();
     }
   }
-  function importJSON() {
-    let proof = prompt("Enter JSON data");
+  async function importJSON() {
+    let proof = await prompt("Enter JSON data");
     if (!proof) return;
     proof = JSON.parse(proof);
     checkType(proof, "Proof");
@@ -251,14 +250,13 @@ define(async function (req, exports, module, args) {
     saveProofs();
   }
 
-  addEventListener("keydown", (e) => {
+  addEventListener("keydown", async (e) => {
     try {
       if (e.ctrlKey) {
         if (e.key == "p") {
           e.preventDefault();
           renderCurrent(false);
           btns.innerHTML = "";
-          exportBox.style.display = "none";
           print();
         } else if (e.key == "s") {
           e.preventDefault();
@@ -279,16 +277,19 @@ define(async function (req, exports, module, args) {
             const reason = joinReason(row.reason, i, false).padEnd(maxReasonLen, " ");
             res += `| ${stmt} | ${reason} |\n`;
           }
+          const gui = await openGUI();
+          const exportBox = gui.addElement(createElement("textarea"));
+          exportBox.wrap = "off";
           exportBox.value = res;
           exportBox.cols = Math.min(res.split(/\n/)[0].length, 150);
           exportBox.rows = res.split(/\n/).length;
           exportBox.focus();
           exportBox.select();
+          gui.addElement(createElement("br"));
+          gui.addCancel("Close");
         } else if (e.key == "i") {
           importJSON();
         }
-      } else if (e.key == "o") {
-        importMD();
       }
     } catch (e) {
       console.error(e);
@@ -404,30 +405,86 @@ define(async function (req, exports, module, args) {
     const elem = document.createElement("div");
     elem.appendChild(
       ButtonRef("h5", parseExpr(proof.name), {
-        onclick() {
-          const name = prompt("Enter a name", proof.name);
-          if (name) proof.name = name;
-          saveProofs();
+        async onclick() {
+          const gui = await openGUI();
+          gui.addElement(createElement("h2", "Enter a name"));
+          const input = gui.addElement(createElement("input"));
+          input.value = proof.name;
+          input.select();
+          gui.addConfirm(
+            ButtonRef("button", "Save", {
+              onclick() {
+                proof.name = input.value;
+                saveProofs();
+                gui.close();
+              }
+            })
+          );
+          gui.addCancel(
+            ButtonRef("button", "Cancel", {
+              onclick() {
+                gui.close();
+              }
+            })
+          );
         }
       })
     );
     elem.appendChild(
       ButtonRef("h5", parseExpr(proof.prove.join(newLine)), {
-        onclick() {
-          /** @type {string | null} */
-          let prove = "";
-          let i = 0;
-          while ((prove = prompt("Enter the prove statement", proof.prove[i]))) {
-            if (prove != null) proof.prove[i] = prove;
-            i++;
+        async onclick() {
+          const gui = await openGUI();
+          gui.addElement(createElement("h2", "Enter the prove statements"));
+          const statementsDisp = gui.addElement(createElement("div"));
+          let inputs = [];
+          function update() {
+            statementsDisp.innerHTML = "";
+            inputs.length = 0;
+            for (let i = 0; i < proof.prove.length; i++) {
+              const prove = proof.prove[i];
+              const input = statementsDisp.appendChild(createElement("input"));
+              inputs.push(input);
+              const remove = statementsDisp.appendChild(
+                ButtonRef("button", "-", {
+                  onclick() {
+                    proof.prove.splice(i, 1);
+                    update();
+                    saveProofs();
+                  }
+                })
+              );
+              input.value = prove;
+              statementsDisp.appendChild(createElement("br"));
+            }
           }
-          proof.prove = replaceSnippets(proof.prove);
-          saveProofs();
-        },
-        onrightclick() {
-          let id = prompt(`Enter a number to delete\n${proof.prove.map((v, i) => `${i + 1}: ${v}`).join("\n")}`);
-          if (id != null && !Number.isNaN(+id) && +id > 0 && +id <= proof.prove.length) proof.prove.splice(+id - 1, 1);
-          saveProofs();
+          update();
+          gui.addElement(
+            ButtonRef("button", "Add", {
+              onclick() {
+                proof.prove.push("");
+                update();
+                saveProofs();
+              }
+            })
+          );
+          gui.addConfirm(
+            ButtonRef("button", "Save", {
+              onclick() {
+                proof.prove = inputs.map((v) => v.value).filter((v) => v);
+                saveProofs();
+                gui.close();
+              }
+            })
+          );
+          // /** @type {string | null} */
+          // let prove = "";
+          // let i = 0;
+          // while ((prove = await prompt("Enter the prove statement", proof.prove[i]))) {
+          //   if (prove != null) proof.prove[i] = prove;
+          //   i++;
+          // }
+          // proof.prove = replaceSnippets(proof.prove);
+          // saveProofs();
         }
       })
     );
@@ -438,25 +495,68 @@ define(async function (req, exports, module, args) {
     for (let i = 0; i < proof.data.length; i++) {
       const row = proof.data[i];
       const tr = body.appendChild(document.createElement("tr"));
+      async function change() {
+        const gui = await openGUI();
+        gui.addElement(createElement("h2", "Enter the statements"));
+        const statementsDisp = gui.addElement(createElement("div"));
+        let inputs = [];
+        let stmts = row.stmts;
+        function update() {
+          statementsDisp.innerHTML = "";
+          inputs.length = 0;
+          for (let i = 0; i < stmts.length; i++) {
+            const input = statementsDisp.appendChild(createElement("input"));
+            inputs.push(input);
+            const remove = statementsDisp.appendChild(
+              ButtonRef("button", "-", {
+                onclick() {
+                  stmts.splice(i, 1);
+                  update();
+                }
+              })
+            );
+            input.value = stmts[i];
+            statementsDisp.appendChild(createElement("br"));
+          }
+        }
+        update();
+        gui.addElement(
+          ButtonRef("button", "Add", {
+            onclick() {
+              stmts.push("");
+              update();
+            }
+          })
+        );
+
+        gui.addElement(createElement("br"));
+
+        gui.addElement(createElement("label", "Reason: "));
+        const reasonInput = gui.addElement(createElement("input"));
+        reasonInput.value = joinReason(row.reason, i, false, false);
+
+        gui.addElement(createElement("br"));
+
+        gui.addConfirm(
+          ButtonRef("button", "Save", {
+            onclick() {
+              stmts = inputs.map((v) => v.value).filter((v) => v);
+              gui.close();
+              row.stmts = replaceSnippets(stmts);
+              row.reason = parseReasons(reasonInput.value);
+              saveProofs();
+            }
+          })
+        );
+        gui.addCancel("Cancel");
+      }
+
       tr.appendChild(
         createElement(
           "td",
           ButtonRef("span", `${i + 1}. ${parseExpr(row.stmts.join(newLine))}`, {
-            onclick() {
-              /** @type {string | null} */
-              let stmt = "";
-              let i = 0;
-              while ((stmt = prompt("Enter the statement", row.stmts[i]))) {
-                if (stmt != null) row.stmts[i] = stmt;
-                i++;
-              }
-              row.stmts = replaceSnippets(row.stmts);
-              saveProofs();
-            },
-            onrightclick() {
-              let id = prompt(`Enter a number to delete\n${row.stmts.map((v, i) => `${i + 1}: ${v}`).join("\n")}`);
-              if (id != null && !Number.isNaN(+id) && +id > 0 && +id <= row.stmts.length) row.stmts.splice(+id - 1, 1);
-              saveProofs();
+            async onclick() {
+              await change();
             }
           })
         )
@@ -465,11 +565,8 @@ define(async function (req, exports, module, args) {
         createElement(
           "td",
           ButtonRef("span", joinReason(row.reason, i), {
-            onclick() {
-              let reason = prompt("Enter the reason", joinReason(row.reason, i, false, false));
-              if (!reason) return;
-              row.reason = parseReasons(reason);
-              saveProofs();
+            async onclick() {
+              await change();
             }
           })
         )
@@ -495,40 +592,54 @@ define(async function (req, exports, module, args) {
           createElement(
             "td",
             ButtonRef("=", {
-              onclick() {
-                const strNum = prompt("Enter a new number to insert above");
-                if (strNum == null) return;
-                const num = parseInt(strNum) - 1;
+              async onclick() {
+                const gui = await openGUI();
+                gui.addElement(createElement("h2", "Enter a new number to insert above"));
+                const input = gui.addElement(createElement("input"));
+                input.select();
+                gui.addElement(createElement("br"));
+                gui.addConfirm(
+                  ButtonRef("button", "Save", {
+                    onclick() {
+                      const strNum = input.value;
+                      gui.close();
+                      if (strNum == null) return;
+                      const num = parseInt(strNum) - 1;
 
-                // writeLn(i);
-                // writeLn(num);
+                      // writeLn(i);
+                      // writeLn(num);
 
-                const temp = proof.data[i];
-                proof.data[i] = proof.data[num];
-                proof.data[num] = temp;
+                      const temp = proof.data[i];
+                      proof.data[i] = proof.data[num];
+                      proof.data[num] = temp;
 
-                for (let j = 0; j < proof.data.length; j++) {
-                  const { reason } = proof.data[j];
-                  if (reason.args.map((v) => v.num).includes(i + 1)) {
-                    reason.args = reason.args.map((v) => ({ num: v.num == i + 1 ? num + 1 : v.num, segment: v.segment }));
-                  } else if (reason.args.map((v) => v.num).includes(num + 1)) {
-                    reason.args = reason.args.map((v) => ({ num: v.num == num + 1 ? i + 1 : v.num, segment: v.segment }));
-                  }
-                }
+                      for (let j = 0; j < proof.data.length; j++) {
+                        const { reason } = proof.data[j];
+                        if (reason.args.map((v) => v.num).includes(i + 1)) {
+                          reason.args = reason.args.map((v) => ({ num: v.num == i + 1 ? num + 1 : v.num, segment: v.segment }));
+                        } else if (reason.args.map((v) => v.num).includes(num + 1)) {
+                          reason.args = reason.args.map((v) => ({ num: v.num == num + 1 ? i + 1 : v.num, segment: v.segment }));
+                        }
+                      }
 
-                if (num < i) {
-                  for (let j = num + 1; j < i + 1; j++) {
-                    const temp = proof.data[i];
-                    proof.data[i] = proof.data[j];
-                    proof.data[j] = temp;
-                  }
-                } else if (num > i) {
-                  for (let j = i + 1; j < num; j++) {
-                    const temp = proof.data[i];
-                    proof.data[i] = proof.data[j];
-                    proof.data[j] = temp;
-                  }
-                }
+                      if (num < i) {
+                        for (let j = num + 1; j < i + 1; j++) {
+                          const temp = proof.data[i];
+                          proof.data[i] = proof.data[j];
+                          proof.data[j] = temp;
+                        }
+                      } else if (num > i) {
+                        for (let j = i + 1; j < num; j++) {
+                          const temp = proof.data[i];
+                          proof.data[i] = proof.data[j];
+                          proof.data[j] = temp;
+                        }
+                      }
+                      saveProofs();
+                    }
+                  })
+                );
+                gui.addCancel("Cancel");
 
                 // saveProofs();
 
@@ -551,7 +662,6 @@ define(async function (req, exports, module, args) {
                 //     } else return v;
                 //   });
                 // }
-                saveProofs();
               }
             })
           )
@@ -563,17 +673,64 @@ define(async function (req, exports, module, args) {
       const tr = body.appendChild(document.createElement("tr"));
       tr.appendChild(
         ButtonRef("Add", {
-          onclick() {
+          async onclick() {
+            const gui = await openGUI();
+            gui.addElement(createElement("h2", "Enter the statements"));
+            const statementsDisp = gui.addElement(createElement("div"));
+            let inputs = [];
             let stmts = [];
-            /** @type {string | null} */
-            let stmt = "";
-            while ((stmt = prompt("Enter the statement"))) stmts.push(stmt);
-            let reason = prompt("Enter the reason") || "";
-            proof.data.push({
-              stmts: replaceSnippets(stmts),
-              reason: parseReasons(reason)
-            });
-            saveProofs();
+            function update() {
+              statementsDisp.innerHTML = "";
+              inputs.length = 0;
+              for (let i = 0; i < stmts.length; i++) {
+                const input = statementsDisp.appendChild(createElement("input"));
+                inputs.push(input);
+                const remove = statementsDisp.appendChild(
+                  ButtonRef("button", "-", {
+                    onclick() {
+                      stmts.splice(i, 1);
+                      update();
+                    }
+                  })
+                );
+                statementsDisp.appendChild(createElement("br"));
+              }
+            }
+            update();
+            gui.addElement(
+              ButtonRef("button", "Add", {
+                onclick() {
+                  stmts.push("");
+                  update();
+                }
+              })
+            );
+
+            gui.addElement(createElement("br"));
+
+            gui.addElement(createElement("label", "Reason: "));
+            const reasonInput = gui.addElement(createElement("input"));
+
+            gui.addElement(createElement("br"));
+
+            gui.addConfirm(
+              ButtonRef("button", "Save", {
+                onclick() {
+                  stmts = inputs.map((v) => v.value).filter((v) => v);
+                  gui.close();
+                  proof.data.push({
+                    stmts: replaceSnippets(stmts),
+                    reason: parseReasons(reasonInput.value)
+                  });
+                  saveProofs();
+                }
+              })
+            );
+            gui.addCancel("Cancel");
+            // /** @type {string | null} */
+            // let stmt = "";
+            // while ((stmt = await prompt("Enter the statement"))) stmts.push(stmt);
+            // let reason = await prompt("Enter the reason") || "";
           }
         })
       );
@@ -582,8 +739,8 @@ define(async function (req, exports, module, args) {
     return elem;
   }
 
-  function create() {
-    let name = prompt("Enter a name");
+  async function create() {
+    let name = await prompt("Enter a name");
     if (!name) return;
 
     proofs.push({
@@ -603,18 +760,46 @@ define(async function (req, exports, module, args) {
     viewport.appendChild(render(currentProofID, interactive));
   }
 
-  function selectProof(text = "Choose a proof") {
-    let promptText = `${text}:\n`;
-    for (let i = 0; i < proofs.length; i++) {
-      const proof = proofs[i];
-      promptText += `${i + 1}: ${proof.name}${i != proofs.length - 1 ? "\n" : ""}`;
-    }
-    let iStr = prompt(promptText);
-    if (iStr == null || Number.isNaN(+iStr)) return; // throw new Error("Invalid number");
-    let i = +iStr;
-    i = +i - 1;
-    if (i < -1 || i >= proofs.length) return null;
-    return +i;
+  /**
+   * @returns {Promise<number>}
+   */
+  async function selectProof(text = "Choose a proof") {
+    return new Promise(async (resolve) => {
+      const gui = await openGUI();
+      gui.addElement(createElement("h2", text));
+      gui.addElement(createElement("br"));
+      for (let i = 0; i < proofs.length; i++) {
+        const proof = proofs[i];
+        gui.addElement(
+          ButtonRef("div", parseExpr(proof.name), {
+            onclick() {
+              resolve(i);
+              gui.close();
+            }
+          })
+        );
+      }
+      gui.addElement(
+        ButtonRef("Cancel", {
+          onclick() {
+            resolve(-1);
+            gui.close();
+          }
+        })
+      );
+    });
+
+    // let promptText = `${text}:\n`;
+    // for (let i = 0; i < proofs.length; i++) {
+    //   const proof = proofs[i];
+    //   promptText += `${i + 1}: ${proof.name}${i != proofs.length - 1 ? "\n" : ""}`;
+    // }
+    // let iStr = await prompt(promptText);
+    // if (iStr == null || Number.isNaN(+iStr)) return; // throw new Error("Invalid number");
+    // let i = +iStr;
+    // i = +i - 1;
+    // if (i < -1 || i >= proofs.length) return null;
+    // return +i;
   }
 
   Button(btns, "New", {
@@ -633,18 +818,17 @@ define(async function (req, exports, module, args) {
     }
   });
   Button(btns, "Load", {
-    onclick() {
-      let i = selectProof();
-      if (i == 0) currentProofID = 0;
-      if (i == null) return;
+    async onclick() {
+      let i = await selectProof();
+      if (i == -1) return;
       currentProofID = i;
       saveProofs();
     }
   });
   Button(btns, "Remove", {
-    onclick() {
-      let i = selectProof("Choose a proof to delete");
-      if (i == null) return;
+    async onclick() {
+      let i = await selectProof("Choose a proof to delete");
+      if (i == -1) return;
       proofs.splice(i, 1);
       if (currentProofID > proofs.length - 1) currentProofID--;
       saveProofs();

@@ -62,7 +62,7 @@ define(async (req, exports, module, args) => {
   // writeLn((23653463463).toString(2));
   // const data = ('1'.charCodeAt(0)).toString(2);
   // writeLn(data);
-  await generateBarcode("This is not a barcode. It can be read, but not very well. Hello", c);
+  await generateBarcode("Hello", c);
 
   /**
    * @param {HTMLCanvasElement} canvas

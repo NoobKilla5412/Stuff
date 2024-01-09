@@ -1,0 +1,49 @@
+[
+  {
+    "data": [
+      {
+        "stmt": "$\\overline{BC}\\cong\\overline{ED}$",
+        "reason": {
+          "name": "Given",
+          "args": []
+        }
+      },
+      {
+        "stmt": "$\\angle ADC\\cong\\angle ACD$",
+        "reason": {
+          "name": "Given",
+          "args": []
+        }
+      },
+      {
+        "stmt": "$\\overline{CD}\\cong\\overline{CD}$",
+        "reason": {
+          "name": "$\\cong$ segs reflex",
+          "args": []
+        }
+      },
+      {
+        "stmt": "$\\triangle BCD\\cong\\triangle EDC$",
+        "reason": {
+          "name": "SAS $\\triangle\\cong$",
+          "args": []
+        }
+      },
+      {
+        "stmt": "$\\overline{EC}\\cong\\overline{BD}$",
+        "reason": {
+          "name": "CPCTC",
+          "args": []
+        }
+      },
+      {
+        "stmt": "$\\angle CED\\cong\\angle DBC$",
+        "reason": {
+          "name": "CPCTC",
+          "args": []
+        }
+      }
+    ],
+    "name": "4.5 #25"
+  }
+]
