@@ -270,7 +270,7 @@
             elem.onload = () => {
               resolve();
             };
-            elem.src = "https://noobkilla5412.github.io/Stuff" + path;
+            elem.src = path;
             document.body.appendChild(elem);
           })
         ),
@@ -347,7 +347,6 @@
      * @param {string} name
      */
     async function init(name) {
-      writeLn(defaultBasePath);
       if (!document.title) {
         document.title = name;
       }
