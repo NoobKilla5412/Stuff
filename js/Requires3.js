@@ -262,6 +262,7 @@
      * @returns {Promise<void>}
      */
     async function getScript(path) {
+      writeLn(path);
       return Promise.race([
         /** @type {Promise<void>} */ (
           new Promise((resolve) => {
