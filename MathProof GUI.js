@@ -406,7 +406,7 @@ define(async function (req, exports, module, args) {
     elem.appendChild(
       ButtonRef("h5", parseExpr(proof.name) || "Enter a name", {
         async onclick() {
-          proof.name = await prompt("Enter a name");
+          proof.name = await prompt("Enter a name", proof.name);
           saveProofs();
         }
       })
