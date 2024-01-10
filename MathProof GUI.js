@@ -746,7 +746,7 @@ define(async function (req, exports, module, args) {
     proofs.push({
       data: [],
       name,
-      prove: ["Enter a prove statement"]
+      prove: []
     });
 
     currentProofID = proofs.length - 1;
