@@ -406,27 +406,8 @@ define(async function (req, exports, module, args) {
     elem.appendChild(
       ButtonRef("h5", parseExpr(proof.name) || "Enter a name", {
         async onclick() {
-          const gui = await openGUI();
-          gui.addElement(createElement("h2", "Enter a name"));
-          const input = gui.addElement(createElement("input"));
-          input.value = proof.name;
-          input.select();
-          gui.addConfirm(
-            ButtonRef("button", "Save", {
-              onclick() {
-                proof.name = input.value;
-                saveProofs();
-                gui.close();
-              }
-            })
-          );
-          gui.addCancel(
-            ButtonRef("button", "Cancel", {
-              onclick() {
-                gui.close();
-              }
-            })
-          );
+          proof.name = await prompt("Enter a name");
+          saveProofs();
         }
       })
     );
