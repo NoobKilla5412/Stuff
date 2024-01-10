@@ -19,7 +19,7 @@ define(async function (req, exports, module, args) {
           if (!(elem instanceof HTMLElement)) throw new Error("Invalid element");
           dialog.appendChild(elem);
           dialog.addEventListener("keydown", (e) => {
-            if (e.key == "Enter") elem.click();
+            if (e.key == "Enter" && !(document.activeElement instanceof HTMLTextAreaElement)) elem.click();
           });
           return elem;
         },
