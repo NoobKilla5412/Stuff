@@ -404,7 +404,7 @@ define(async function (req, exports, module, args) {
     const proof = proofs[proofID];
     const elem = document.createElement("div");
     elem.appendChild(
-      ButtonRef("h5", parseExpr(proof.name), {
+      ButtonRef("h5", parseExpr(proof.name) || "Enter a name", {
         async onclick() {
           const gui = await openGUI();
           gui.addElement(createElement("h2", "Enter a name"));
