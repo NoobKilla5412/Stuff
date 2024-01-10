@@ -431,7 +431,7 @@ define(async function (req, exports, module, args) {
       })
     );
     elem.appendChild(
-      ButtonRef("h5", parseExpr(proof.prove.join(newLine)), {
+      ButtonRef("h5", parseExpr(proof.prove.join(newLine)) || "Enter a prove statement", {
         async onclick() {
           const gui = await openGUI();
           gui.addElement(createElement("h2", "Enter the prove statements"));
