@@ -675,6 +675,7 @@ define(async function (req, exports, module, args) {
                     }
                   })
                 );
+                input.value = stmts[i];
                 statementsDisp.appendChild(createElement("br"));
               }
             }
