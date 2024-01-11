@@ -7,7 +7,6 @@ define(async function (req, exports, module, args) {
   const { typedef, isType, checkType } = await req("./js/typeUtils");
   const { openGUI, prompt } = await req("./js/GUI");
   const overload = await req("./js/overload");
-  // const { open } = await req("./js/Menu");
 
   // localStorage.clear();
   const newLine = " $ \\\\ $ ";
