@@ -3,10 +3,6 @@
 (async (global) => {
   if (location.pathname == "/Stuff/") location.pathname += "index.html";
 
-  addEventListener("DOMContentLoaded", () => {
-    writeLn(location.pathname);
-  });
-
   /**
    * @param {{toString(): string}} text
    */
