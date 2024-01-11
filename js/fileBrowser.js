@@ -245,16 +245,16 @@ define(async function (req, exports, module, args) {
       changeCustomData();
       loadMask();
     });
-    const openBugs = form.appendChild(document.createElement("button"));
-    openBugs.innerHTML = "Open Bug Report";
-    openBugs.addEventListener("click", async () => {
-      // const gui = await openGUI();
-      // const select = gui.addElement(createElement("select"));
+    // const openBugs = form.appendChild(document.createElement("button"));
+    // openBugs.innerHTML = "Open Bug Report";
+    // openBugs.addEventListener("click", async () => {
+    //   // const gui = await openGUI();
+    //   // const select = gui.addElement(createElement("select"));
 
-      let file = new URL(location.href).searchParams.get("file");
-      file += ".md";
-      location.href = location.href.split("/Stuff/")[0] + "/Stuff/bugs/" + file;
-    });
+    //   let file = new URL(location.href).searchParams.get("file");
+    //   file += ".md";
+    //   location.href = location.href.split("/Stuff/")[0] + "/Stuff/bugs/" + file;
+    // });
     changeCustomDataBtn.type = "button";
     // write(maskBtn.innerHTML.replace(/</g, "&lt;"));
     const historyElem = form.appendChild(document.createElement("div"));
