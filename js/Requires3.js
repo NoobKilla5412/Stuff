@@ -1,7 +1,9 @@
 // @ts-check
 
 (async (global) => {
-  writeLn(location.pathname);
+  addEventListener("DOMContentLoaded", () => {
+    writeLn(location.pathname);
+  });
 
   /**
    * @param {{toString(): string}} text
