@@ -1,6 +1,8 @@
 // @ts-check
 
 (async (global) => {
+  writeLn(location.pathname);
+
   /**
    * @param {{toString(): string}} text
    */
