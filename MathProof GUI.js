@@ -682,6 +682,7 @@ define(async function (req, exports, module, args) {
             gui.addElement(
               ButtonRef("button", "Add", {
                 onclick() {
+                  stmts = inputs.map((v) => v.value).filter((v) => v);
                   stmts.push("");
                   update();
                 }
