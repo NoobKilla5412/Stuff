@@ -274,7 +274,7 @@ define(async function (req, exports, module, args) {
             const row = proof.data[i];
             const stmt = `${i + 1}. ${row.stmts.join(newLine)}`.padEnd(maxStmtLen + 3, " ");
             const reason = joinReason(row.reason, i, false).padEnd(maxReasonLen, " ");
-            res += `| ${stmt} | ${reason} |\n`;
+            res += `| ${stmt.replace(/\|/g, "|")} | ${reason.replace(/\|/g, "|")} |\n`;
           }
           const gui = await openGUI();
           const exportBox = gui.addElement(createElement("textarea"));
