@@ -8,13 +8,17 @@ define(async function (req, exports, module, args) {
   /**
    * @typedef Options
    * @prop {boolean} closeable
+   * @prop {boolean} override
    */
 
   const defaultOptions = {
-    closeable: true
+    closeable: true,
+    override: false
   };
 
   let GUIOpen = false;
+
+  let currentGUI = null;
 
   /**
    * @param {Partial<Options>} _options
@@ -22,10 +26,12 @@ define(async function (req, exports, module, args) {
   this.openGUI = async (_options) => {
     /** @type {Options} */
     let options = Object.assign({}, defaultOptions, _options);
-    return new Promise((resolve) => {
-      if (GUIOpen) {
-        while (GUIOpen);
+    return new Promise((resolve, reject) => {
+      if (GUIOpen && !options.override) {
+        reject("Another GUI is already open");
+        return;
       }
+      if (options.override) currentGUI?.close();
       const dialog = createElement("dialog", true);
       dialog.showModal();
       GUIOpen = true;
@@ -39,6 +45,7 @@ define(async function (req, exports, module, args) {
       function close() {
         dialog.remove();
         isOpen = false;
+        currentGUI = null;
       }
 
       const interval = setInterval(() => {
@@ -48,7 +55,7 @@ define(async function (req, exports, module, args) {
         }
       }, 100);
 
-      resolve({
+      let res = {
         addElement(elem) {
           if (!(elem instanceof HTMLElement)) throw new Error("Invalid element");
           dialog.appendChild(elem);
@@ -101,7 +108,11 @@ define(async function (req, exports, module, args) {
         get element() {
           return dialog;
         }
-      });
+      };
+
+      currentGUI = res;
+
+      resolve(res);
     });
   };
 
