@@ -293,6 +293,7 @@ define(async function (req, exports, module, args) {
           let proof = clone(proofs[currentProofID]);
           proof.data.forEach((v) => {
             v.stmts = v.stmts.map((v) => v.replace(/\|/g, "\\|"));
+            v.reason.name = v.reason.name.replace(/\|/g, "\\|");
           });
           let maxStmtLen = Math.max(...proof.data.map((v) => v.stmts.join(newLine).length));
           let maxReasonLen = Math.max(...proof.data.map((v, i) => joinReason(v.reason, i, false).length));
