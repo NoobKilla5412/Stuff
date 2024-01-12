@@ -3,6 +3,7 @@
 define(async function (req, exports, module, args) {
   const { createElement } = await req("./HTMLUtils");
   const { openGUI } = await req("./GUI");
+  const { ButtonRef } = await req("./Button");
 
   addEventListener("DOMContentLoaded", () => {
     let file = location.href.split(defaultBasePath)[1].split("?")[0].slice(1);
@@ -365,7 +366,7 @@ define(async function (req, exports, module, args) {
 
   let devOpen = false;
 
-  addEventListener("keydown", (e) => {
+  addEventListener("keydown", async (e) => {
     if (e.ctrlKey) {
       if (e.key == "o") {
         e.preventDefault();
