@@ -257,9 +257,20 @@ define(async function (req, exports, module, args) {
   function clone(obj) {
     if (typeof obj == "object" && obj != null) {
       if (Array.isArray(obj)) {
-        return [...clone(obj)];
+        let arr = [];
+        for (let i = 0; i < obj.length; i++) {
+          const element = obj[i];
+          arr.push(clone(element));
+        }
+      } else {
+        let object = {};
+        for (const key in obj) {
+          if (Object.hasOwnProperty.call(obj, key)) {
+            const element = obj[key];
+            object[key] = clone(element);
+          }
+        }
       }
-      return { ...clone(obj) };
     } else return obj;
   }
 
