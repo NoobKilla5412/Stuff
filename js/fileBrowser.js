@@ -366,6 +366,42 @@ define(async function (req, exports, module, args) {
 
   let devOpen = false;
 
+  const password = "ZmpnaA==";
+
+  if (localStorage.getItem("locked") == null) localStorage.setItem("locked", false);
+  if (localStorage.getItem("locked") == "true") lock();
+
+  async function lock() {
+    // if (localStorage.getItem("locked") == "true") return;
+    const gui = await openGUI({
+      closeable: false
+    });
+    localStorage.setItem("locked", "true");
+    const background = document.body.appendChild(createElement("div"));
+    background.style.background = "black";
+    background.style.position = "absolute";
+    background.style.left = "0px";
+    background.style.top = "0px";
+    background.style.width = "100%";
+    background.style.height = "100%";
+    gui.addElement(createElement("h2", "Enter your password"));
+    const input = gui.addElement(createElement("input"));
+    input.type = "password";
+    input.select();
+    gui.addConfirm(
+      ButtonRef("button", "Go", {
+        onclick() {
+          if (btoa(input.value) == password) {
+            gui.close();
+          }
+        }
+      })
+    );
+    await gui.onClose();
+    localStorage.setItem("locked", "false");
+    background.remove();
+  }
+
   addEventListener("keydown", async (e) => {
     if (e.ctrlKey) {
       if (e.key == "o") {
@@ -454,6 +490,10 @@ define(async function (req, exports, module, args) {
             })
             .replace(/</g, "&lt;")}</pre>`
         );
+      }
+    } else if (e.altKey) {
+      if (e.key == "l") {
+        lock();
       }
     } else if (e.key == "Escape") {
       hideOnFocusLost();

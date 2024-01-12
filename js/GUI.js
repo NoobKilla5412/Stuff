@@ -28,6 +28,12 @@ define(async function (req, exports, module, args) {
           e.preventDefault();
         }
       });
+      let isOpen = true;
+
+      function close() {
+        dialog.remove();
+        isOpen = false;
+      }
 
       resolve({
         addElement(elem) {
@@ -45,7 +51,7 @@ define(async function (req, exports, module, args) {
           dialog.addEventListener("keydown", (e) => {
             if (e.key == "Enter" && !(document.activeElement instanceof HTMLTextAreaElement)) {
               elem.click();
-              if (options.close) dialog.remove();
+              if (options.close) close();
             }
           });
           return elem;
@@ -55,7 +61,7 @@ define(async function (req, exports, module, args) {
           if (typeof elem == "string") {
             elem = ButtonRef("button", elem, {
               onclick() {
-                dialog.remove();
+                close();
               }
             });
           }
@@ -67,7 +73,17 @@ define(async function (req, exports, module, args) {
           return elem;
         },
         close() {
-          dialog.remove();
+          close();
+        },
+        async onClose() {
+          return new Promise((resolve) => {
+            const interval = setInterval(() => {
+              if (!isOpen) {
+                clearInterval(interval);
+                resolve();
+              }
+            }, 100);
+          });
         },
         get element() {
           return dialog;
