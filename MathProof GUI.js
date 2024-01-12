@@ -262,6 +262,7 @@ define(async function (req, exports, module, args) {
           const element = obj[i];
           arr.push(clone(element));
         }
+        return arr;
       } else {
         let object = {};
         for (const key in obj) {
@@ -270,6 +271,7 @@ define(async function (req, exports, module, args) {
             object[key] = clone(element);
           }
         }
+        return object;
       }
     } else return obj;
   }
