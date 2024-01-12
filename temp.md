@@ -78,9 +78,16 @@ $$
   \end{align*}
 $$
 
-25.
+25. ?
 
-$$ $$
+| 5.1 #25                                                                                                                                                                            |                               |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
+| 1. $\overline{AB}\parallel\overline{CD}$ $ \\ $ $\overline{DF}\parallel\overline{CB}$ $ \\ $ $\overline{AD}\parallel\overline{EC}$ $ \\ $ $m\angle B = 37$ $ \\ $ $m\angle A = 48$ | 1. Given                      |
+| 2. $DFBC$ is a \|\|gram                                                                                                                                                            | 2. def \|\|gram (1a, 1b)      |
+| 3. $ADCE$ is a \|\|gram                                                                                                                                                            | 3. def \|\|gram (1a, 1c)      |
+| 4. $\angle A\cong\angle DCE$                                                                                                                                                       | 4. opp $\angle$'s $\cong$ (3) |
+| 5. $\angle B\cong\angle FDC$                                                                                                                                                       | 5. opp $\angle$'s $\cong$ (2) |
+| 6. $m\angle A = m\angle DCE$ $ \\ $ $m\angle B = m\angle FDC$                                                                                                                      | 6. def $\cong$ $\angle$'s     |
 
 27.
 
