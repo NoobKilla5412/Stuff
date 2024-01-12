@@ -249,6 +249,20 @@ define(async function (req, exports, module, args) {
     saveProofs();
   }
 
+  /**
+   * @template T
+   * @param {T} obj
+   * @returns {T}
+   */
+  function clone(obj) {
+    if (typeof obj == "object" && obj != null) {
+      if (Array.isArray(obj)) {
+        return [...clone(obj)];
+      }
+      return { ...clone(obj) };
+    } else return obj;
+  }
+
   addEventListener("keydown", async (e) => {
     try {
       if (e.ctrlKey) {
@@ -263,7 +277,10 @@ define(async function (req, exports, module, args) {
           writeObj(proofs[currentProofID]);
         } else if (e.key == "e") {
           e.preventDefault();
-          let proof = proofs[currentProofID];
+          let proof = clone(proofs[currentProofID]);
+          proof.data.forEach((v) => {
+            v.stmts = v.stmts.map((v) => v.replace(/\|/g, "\\|"));
+          });
           let maxStmtLen = Math.max(...proof.data.map((v) => v.stmts.join(newLine).length));
           let maxReasonLen = Math.max(...proof.data.map((v, i) => joinReason(v.reason, i, false).length));
 
@@ -274,7 +291,7 @@ define(async function (req, exports, module, args) {
             const row = proof.data[i];
             const stmt = `${i + 1}. ${row.stmts.join(newLine)}`.padEnd(maxStmtLen + 3, " ");
             const reason = joinReason(row.reason, i, false).padEnd(maxReasonLen, " ");
-            res += `| ${stmt.replace(/\|/g, "|")} | ${reason.replace(/\|/g, "|")} |\n`;
+            res += `| ${stmt} | ${reason} |\n`;
           }
           const gui = await openGUI();
           const exportBox = gui.addElement(createElement("textarea"));
