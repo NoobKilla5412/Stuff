@@ -20,10 +20,12 @@ define(async function (req, exports, module, args) {
    * @param {Partial<Options>} _options
    */
   this.openGUI = async (_options) => {
-    if (GUIOpen) return;
     /** @type {Options} */
     let options = Object.assign({}, defaultOptions, _options);
     return new Promise((resolve) => {
+      if (GUIOpen) {
+        while (GUIOpen);
+      }
       const dialog = createElement("dialog", true);
       dialog.showModal();
       GUIOpen = true;

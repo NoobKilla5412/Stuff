@@ -373,9 +373,11 @@ define(async function (req, exports, module, args) {
 
   async function lock() {
     // if (localStorage.getItem("locked") == "true") return;
-    const gui = await openGUI({
-      closeable: false
-    });
+    let gui = null;
+    while (gui == null)
+      gui = await openGUI({
+        closeable: false
+      });
     localStorage.setItem("locked", "true");
     const background = document.body.appendChild(createElement("div"));
     background.style.background = "black";
