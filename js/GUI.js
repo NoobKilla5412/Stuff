@@ -14,15 +14,19 @@ define(async function (req, exports, module, args) {
     closeable: true
   };
 
+  let GUIOpen = false;
+
   /**
    * @param {Partial<Options>} _options
    */
   this.openGUI = async (_options) => {
+    if (GUIOpen) return;
     /** @type {Options} */
     let options = Object.assign({}, defaultOptions, _options);
     return new Promise((resolve) => {
       const dialog = createElement("dialog", true);
       dialog.showModal();
+      GUIOpen = true;
       addEventListener("keydown", (e) => {
         if (e.key == "Escape" && !options.closeable) {
           e.preventDefault();
@@ -34,6 +38,13 @@ define(async function (req, exports, module, args) {
         dialog.remove();
         isOpen = false;
       }
+
+      const interval = setInterval(() => {
+        if (!isOpen) {
+          clearInterval(interval);
+          GUIOpen = false;
+        }
+      }, 100);
 
       resolve({
         addElement(elem) {
