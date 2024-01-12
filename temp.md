@@ -1,19 +1,129 @@
-# 5.1 Notes
+# 5.1 Homework
 
-## Def $\parallel$ gram
+## Requests
 
-A quadrilateral is a parallelogram  
-iff  
-both pairs of opposite sides are $\parallel$
+25
 
-## Opp sides $\cong$
+## Homework
 
-G: $ABCD$ is a $\parallel$ gram
+1. opp $\angle$'s $\cong$
 
-P: $\overline{AB}\cong\overline{CD}$  
-   $\overline{BC}\cong\overline{AD}$
+$$ $$
 
-| opp sides $\cong$                                                                     |                             |
-| ------------------------------------------------------------------------------------- | --------------------------- |
-| 1. $ABCD$ is a $\parallel$ gram                                                       | 1. Given                    |
-| 2. $\overline{BC}\parallel\overline{AD}$ $ \\ $ $\overline{AB}\parallel\overline{CD}$ | 2. def $\parallel$ gram (1) |
+3. opp sides $\cong$
+
+$$ $$
+
+5. $20$
+
+$$ $$
+
+7. $11$
+
+$$ $$
+
+9. $105$
+
+$$ $$
+
+11. $16$
+
+$$ $$
+
+13. $15$
+
+$$ $$
+
+15. $37$
+
+$$ $$
+
+17. $125$
+
+$$ $$
+
+19.
+
+$$
+  \begin{align*}
+    \frac{x}{2} &= 2x - 9 \\
+              x &= 4x - 18 \\
+            -3x &= -18 \\
+              x &= 6 \\
+  \end{align*}
+$$
+
+21.
+
+$$
+  \begin{align*}
+    4x + 11 &= 6x - 1 \\
+        -2x &= 10 \\
+          x &= -5 \\
+
+    m\angle K &= 4x + 11 \\
+    m\angle K &= 4(-5) + 11 \\
+    m\angle K &= -20 + 11 \\
+    m\angle K &= -9 \\
+  \end{align*}
+$$
+
+23.
+
+$$
+  \begin{align*}
+    x - 40 &= \frac{3x}{4} \\
+        4x &= 3x + 160 \\
+         x &= 160 \\
+  \end{align*}
+$$
+
+25. ?
+
+$$ $$
+
+27.
+
+$$ $$
+
+29.
+
+$$ $$
+
+31.
+
+$$ $$
+
+33.
+34.
+35.
+36.
+37.
+38.
+39.
+40.
+41.
+
+$$ $$
+
+1.
+
+$$ $$
+
+3.
+
+$$ $$
+
+5.
+
+$$ $$
+
+7.
+
+$$ $$
+
+9.
+
+$$ $$
+
+11.
