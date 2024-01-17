@@ -45,7 +45,7 @@ define(async function (req, module, args) {
       return btn;
     })
     .add(["string", "string", "Listeners", "function"], (type, name, listeners, cb) => {
-      const btn = this.ButtonRef(type, name, onclick);
+      const btn = this.ButtonRef(type, name, listeners);
       cb(btn);
       return btn;
     })
@@ -74,8 +74,8 @@ define(async function (req, module, args) {
       return document.body.appendChild(this.ButtonRef("button", name, listeners));
     })
     .add(["string", "Listeners", "function"], (name, listeners, cb) => {
-      const btn = this.ButtonRef("button", name, listeners, cb);
-      document.body.appendChild(btn);
+      const btn = this.Button(name, listeners);
+      cb(btn);
       return btn;
     })
     .add(["string", "string", "Listeners"], (type, name, listeners) => {
@@ -84,8 +84,8 @@ define(async function (req, module, args) {
       return btn;
     })
     .add(["string", "string", "Listeners", "function"], (type, name, listeners, cb) => {
-      const btn = this.ButtonRef(type, name, listeners, cb);
-      document.body.appendChild(btn);
+      const btn = this.Button(type, name, listeners);
+      cb(btn);
       return btn;
     })
 
