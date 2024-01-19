@@ -21,7 +21,7 @@ define(async function (req, exports, module, args) {
   let currentGUI = null;
 
   /**
-   * @param {Partial<Options>} _options
+   * @param {Partial<Options>=} _options
    */
   this.openGUI = async (_options) => {
     /** @type {Options} */
@@ -133,6 +133,32 @@ define(async function (req, exports, module, args) {
           }
         })
       );
+    });
+  };
+
+  /**
+   * @param {(string | { innerHTML: string; value: string })[]} items
+   */
+  this.menu = async (items) => {
+    return new Promise(async (resolve) => {
+      const gui = await this.openGUI();
+      const select = gui.addElement(createElement("select"));
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+        if (typeof item == "string") {
+          select.appendChild(createElement("option", item));
+        } else {
+          select.appendChild(createElement("option", item.innerHTML, (elem) => (elem.value = item.value)));
+        }
+      }
+      gui.addConfirm(
+        ButtonRef("button", "OK", {
+          onclick() {
+            resolve(select.value);
+          }
+        })
+      );
+      gui.addCancel("Cancel");
     });
   };
 });
