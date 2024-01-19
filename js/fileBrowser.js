@@ -43,6 +43,7 @@ define(async function (req, exports, module, args) {
         yield element;
       }
     }
+    return null;
   }
 
   function allMatches(matches) {
@@ -368,7 +369,7 @@ define(async function (req, exports, module, args) {
 
   const password = "ZmpnaA==";
 
-  if (localStorage.getItem("locked") == null) localStorage.setItem("locked", false);
+  if (localStorage.getItem("locked") == null) localStorage.setItem("locked", "false");
   if (localStorage.getItem("locked") == "true") lock();
 
   async function lock() {
