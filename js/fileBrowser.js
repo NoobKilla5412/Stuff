@@ -435,64 +435,64 @@ define(async function (req, exports, module, args) {
           devOpen = false;
           document.getElementsByClassName("snowlord-devConsole-container-body-exit")[0]?.click();
         }
-      } else if (e.key == "e") {
-        e.preventDefault();
-        keepOpen();
-        // const scripts = document.querySelectorAll("script");
-        // for (const script of scripts) {
-        //   writeLn(script.src);
-        // }
-        /**
-         * @param {string} str
-         */
-        function escapeHTML(str) {
-          return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/\n/g, "<br>");
-        }
-        let file = `<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${document.title}</title>
-  </head>
-  <body>
-    ${false ? '<script src="https://cdn.jsdelivr.net/gh/SnowLord7/devconsole@master/main.js"></script>' : ""}
-    <script>
-    var requiresFunctionsRequired = {};
-    var moduleFunctions = {};
-    var dependencies = [];
-    var modules = {};
-    var exported = true;
-    var __path = ${JSON.stringify(__path)};
-`;
-        for (const key in requiresFunctionsRequired) {
-          if (Object.hasOwnProperty.call(requiresFunctionsRequired, key)) {
-            const element = requiresFunctionsRequired[key];
-            if (element) {
-              file += `${eval(key)}\n`;
-            }
-          }
-        }
-        file += "</script>\n";
-        for (let i = dependencies.length - 1; i >= 0; i--) {
-          const dependency = dependencies[i];
-          if (moduleFunctions[dependency])
-            file += `<script>
-  define("${dependency}", ${moduleFunctions[dependency]}${dependency == mainModule ? ", true" : ""});
-  </script>
-`;
-        }
-        file += "</body></html>";
-        document.write(
-          `<pre>${file
-            .replace(/(^|;)\s*\/\/.*\n/gm, (x, start) => {
-              if (start == ";") return start + "\n";
-              return "";
-            })
-            .replace(/</g, "&lt;")}</pre>`
-        );
       }
+      //       else if (e.key == "e") {
+      //         e.preventDefault();
+      //         // const scripts = document.querySelectorAll("script");
+      //         // for (const script of scripts) {
+      //         //   writeLn(script.src);
+      //         // }
+      //         /**
+      //          * @param {string} str
+      //          */
+      //         function escapeHTML(str) {
+      //           return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/\n/g, "<br>");
+      //         }
+      //         let file = `<!DOCTYPE html>
+      // <html>
+      //   <head>
+      //     <meta charset="UTF-8">
+      //     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      //     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      //     <title>${document.title}</title>
+      //   </head>
+      //   <body>
+      //     ${false ? '<script src="https://cdn.jsdelivr.net/gh/SnowLord7/devconsole@master/main.js"></script>' : ""}
+      //     <script>
+      //     var requiresFunctionsRequired = {};
+      //     var moduleFunctions = {};
+      //     var dependencies = [];
+      //     var modules = {};
+      //     var exported = true;
+      //     var __path = ${JSON.stringify(__path)};
+      // `;
+      //         for (const key in requiresFunctionsRequired) {
+      //           if (Object.hasOwnProperty.call(requiresFunctionsRequired, key)) {
+      //             const element = requiresFunctionsRequired[key];
+      //             if (element) {
+      //               file += `${eval(key)}\n`;
+      //             }
+      //           }
+      //         }
+      //         file += "</script>\n";
+      //         for (let i = dependencies.length - 1; i >= 0; i--) {
+      //           const dependency = dependencies[i];
+      //           if (moduleFunctions[dependency])
+      //             file += `<script>
+      //   define("${dependency}", ${moduleFunctions[dependency]}${dependency == mainModule ? ", true" : ""});
+      //   </script>
+      // `;
+      //         }
+      //         file += "</body></html>";
+      //         document.write(
+      //           `<pre>${file
+      //             .replace(/(^|;)\s*\/\/.*\n/gm, (x, start) => {
+      //               if (start == ";") return start + "\n";
+      //               return "";
+      //             })
+      //             .replace(/</g, "&lt;")}</pre>`
+      //         );
+      //       }
     } else if (e.altKey) {
       if (e.key == "l") {
         lock();

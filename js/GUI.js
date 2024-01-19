@@ -148,13 +148,16 @@ define(async function (req, exports, module, args) {
         if (typeof item == "string") {
           select.appendChild(createElement("option", item));
         } else {
-          select.appendChild(createElement("option", item.innerHTML, (elem) => (elem.value = item.value)));
+          const elem = select.appendChild(createElement("option", item.innerHTML));
+          elem.value = item.value;
         }
       }
+      gui.addElement(createElement("br"));
       gui.addConfirm(
         ButtonRef("button", "OK", {
           onclick() {
             resolve(select.value);
+            gui.close();
           }
         })
       );
