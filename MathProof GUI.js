@@ -291,21 +291,9 @@ define(async function (req, exports, module, args) {
     }
     return res;
   }
-
-  addEventListener("keydown", async (e) => {
-    try {
-      if (e.ctrlKey) {
-        if (e.key == "p") {
-          e.preventDefault();
-          renderCurrent(false);
-          btns.innerHTML = "";
-          print();
-        } else if (e.key == "s") {
-          e.preventDefault();
-          document.body.innerHTML = "";
-          writeObj(proofs[currentProofID]);
-        } else if (e.key == "e") {
-          let type = await menu([
+  
+  function exportProof() {
+    let type = await menu([
             {
               innerHTML: "Export paragraph",
               value: "para"
@@ -368,6 +356,22 @@ define(async function (req, exports, module, args) {
               break;
             }
           }
+  }
+
+  addEventListener("keydown", async (e) => {
+    try {
+      if (e.ctrlKey) {
+        if (e.key == "p") {
+          e.preventDefault();
+          renderCurrent(false);
+          btns.innerHTML = "";
+          print();
+        } else if (e.key == "s") {
+          e.preventDefault();
+          document.body.innerHTML = "";
+          writeObj(proofs[currentProofID]);
+        } else if (e.key == "e") {
+          exportProof();
         } else if (e.key == "i") {
           importJSON();
         }
@@ -881,6 +885,11 @@ define(async function (req, exports, module, args) {
   Button(btns, "Import MD", {
     onclick() {
       importMD();
+    }
+  });
+  Button(btns, "Export", {
+    onclick() {
+      exportProof();
     }
   });
   Button(btns, "Load", {
