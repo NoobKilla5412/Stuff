@@ -292,7 +292,7 @@ define(async function (req, exports, module, args) {
     return res;
   }
   
-  function exportProof() {
+  async function exportProof() {
     let type = await menu([
             {
               innerHTML: "Export paragraph",
@@ -371,7 +371,7 @@ define(async function (req, exports, module, args) {
           document.body.innerHTML = "";
           writeObj(proofs[currentProofID]);
         } else if (e.key == "e") {
-          exportProof();
+          await exportProof();
         } else if (e.key == "i") {
           importJSON();
         }
@@ -889,7 +889,7 @@ define(async function (req, exports, module, args) {
   });
   Button(btns, "Export", {
     onclick() {
-      exportProof();
+      await exportProof();
     }
   });
   Button(btns, "Load", {
