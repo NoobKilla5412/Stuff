@@ -36,8 +36,9 @@ define(async function (req, exports, module, args) {
       dialog.showModal();
       GUIOpen = true;
       addEventListener("keydown", (e) => {
-        if (e.key == "Escape" && !options.closeable) {
+        if (e.key == "Escape") {
           e.preventDefault();
+          if (options.closeable) close();
         }
       });
       let isOpen = true;

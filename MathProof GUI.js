@@ -347,8 +347,16 @@ define(async function (req, exports, module, args) {
           const row = proofs[currentProofID].data[i];
           if (row.reason.name == "Given") res += `We know ${joinArray(row.stmts.map((v) => parseExpr(v)))}. `;
           else {
-            const reason = joinReason(row.reason, i, true, false);
-            res += `${paragraphStarters[i % paragraphStarters.length]} ${parseExpr(joinArray(row.stmts))} by ${reason}. `;
+            // const reason = joinReason(row.reason, i, true, false);
+            let paragraphStarter = paragraphStarters[i % paragraphStarters.length];
+            for (let j = 0; j < row.reason.args.length; j++) {
+              const arg = row.reason.args[j];
+              if (i + 1 - arg.num >= 10) {
+                let segment = arg.segment?.toUpperCase() || "A";
+                paragraphStarter = `Recall that ${parseExpr(proofs[currentProofID].data[arg.num - 1].stmts[segment.charCodeAt(0) - 65])}, so`;
+              }
+            }
+            res += `${paragraphStarter} ${parseExpr(joinArray(row.stmts))} by ${row.reason.name}. `;
           }
         }
         const gui = await openGUI();
@@ -562,6 +570,9 @@ define(async function (req, exports, module, args) {
     table.border = "1";
     const body = table.appendChild(document.createElement("tbody"));
 
+    let steps = checkSteps();
+    console.log(steps);
+
     for (let i = 0; i < proof.data.length; i++) {
       const row = proof.data[i];
       const tr = body.appendChild(document.createElement("tr"));
@@ -622,10 +633,11 @@ define(async function (req, exports, module, args) {
         gui.addCancel("Cancel");
       }
 
+      let stmts = row.stmts.map((v, j) => `${steps.includes(i + 1 + String.fromCharCode(j + 65).toLowerCase()) ? "✅" : "❎"} ${v}`);
       tr.appendChild(
         createElement(
           "td",
-          ButtonRef("span", `${i + 1}. ${parseExpr(row.stmts.join(newLine))}`, {
+          ButtonRef("span", `${i + 1}. ${parseExpr(stmts.join(newLine))}`, {
             async onclick() {
               await change();
             }
@@ -875,6 +887,36 @@ define(async function (req, exports, module, args) {
     // return +i;
   }
 
+  function checkSteps(useGUI = false) {
+    const proof = proofs[currentProofID];
+    let usedSteps = [];
+    for (let i = 0; i < proof.data.length; i++) {
+      const row = proof.data[i];
+      for (let j = 0; j < row.reason.args.length; j++) {
+        const reason = row.reason.args[j];
+        usedSteps.push(reason.num + (reason.segment ?? "a"));
+      }
+    }
+    if (useGUI) {
+      let unuesdSteps = [];
+      for (let i = 0; i < proof.data.length; i++) {
+        const row = proof.data[i];
+        row.stmts.forEach((v, j) => {
+          let num = i + 1 + (String.fromCharCode(j + 65).toLowerCase() ?? "");
+          if (!usedSteps.includes(num)) {
+            if (row.stmts.length > 1) unuesdSteps.push(num);
+            else unuesdSteps.push((i + 1).toString());
+          }
+        });
+      }
+      // const gui = await openGUI();
+      // gui.addElement(createElement("h2", "Unused Steps"));
+      // gui.addElement(createElement("div", unuesdSteps.join("<br>")));
+      // gui.addCancel("Close");
+    }
+    return usedSteps;
+  }
+
   Button(btns, "New", {
     onclick() {
       create();
@@ -893,6 +935,11 @@ define(async function (req, exports, module, args) {
   Button(btns, "Export", {
     async onclick() {
       await exportProof();
+    }
+  });
+  Button(btns, "Check", {
+    onclick() {
+      checkSteps(true);
     }
   });
   Button(btns, "Load", {

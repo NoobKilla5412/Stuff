@@ -102,30 +102,30 @@
     default: 0
   };
 
-  global.console = {
-    log: (data) => {
-      if (typeof data == "string") {
-        writeLn(data);
-      } else {
-        writeObj(data);
-      }
-    },
-    error: writeErr,
-    warn: writeWarn,
-    table: () => {
-      // This function gets overriden in convertToTable.js
-      writeWarn('To use console.table, please import "convertToTable.js"');
-    },
-    count: (label = "default") => {
-      if (!countLabels[label]) countLabels[label] = 1;
-      else countLabels[label]++;
-      console.log(`${label}: ${countLabels[label]}`);
-    },
-    countReset: (label = "default") => {
-      countLabels[label] = 0;
-      console.log(`${label}: ${countLabels[label]}`);
-    }
-  };
+  // global.console = {
+  //   log: (data) => {
+  //     if (typeof data == "string") {
+  //       writeLn(data);
+  //     } else {
+  //       writeObj(data);
+  //     }
+  //   },
+  //   error: writeErr,
+  //   warn: writeWarn,
+  //   table: () => {
+  //     // This function gets overriden in convertToTable.js
+  //     writeWarn('To use console.table, please import "convertToTable.js"');
+  //   },
+  //   count: (label = "default") => {
+  //     if (!countLabels[label]) countLabels[label] = 1;
+  //     else countLabels[label]++;
+  //     console.log(`${label}: ${countLabels[label]}`);
+  //   },
+  //   countReset: (label = "default") => {
+  //     countLabels[label] = 0;
+  //     console.log(`${label}: ${countLabels[label]}`);
+  //   }
+  // };
 
   const styleName = "42389tujfireuofgpsdfjkgnju9jn";
 
