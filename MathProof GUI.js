@@ -292,21 +292,24 @@ define(async function (req, exports, module, args) {
     return res;
   }
 
-  async function exportProof() {
+  /**
+   * @param {KeyboardEvent=} e
+   */
+  async function exportProof(e) {
     let type = await menu([
-      {
-        innerHTML: "Export paragraph",
-        value: "para"
-      },
       {
         innerHTML: "Export markdown",
         value: "md"
+      },
+      {
+        innerHTML: "Export paragraph",
+        value: "para"
       }
     ]);
     await sleep(90);
     switch (type) {
       case "md": {
-        e.preventDefault();
+        e?.preventDefault();
         let proof = clone(proofs[currentProofID]);
         proof.data.forEach((v) => {
           v.stmts = v.stmts.map((v) => v.replace(/\|/g, "\\|"));
