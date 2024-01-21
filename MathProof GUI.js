@@ -291,71 +291,71 @@ define(async function (req, exports, module, args) {
     }
     return res;
   }
-  
+
   async function exportProof() {
     let type = await menu([
-            {
-              innerHTML: "Export paragraph",
-              value: "para"
-            },
-            {
-              innerHTML: "Export markdown",
-              value: "md"
-            }
-          ]);
-          await sleep(90);
-          switch (type) {
-            case "md": {
-              e.preventDefault();
-              let proof = clone(proofs[currentProofID]);
-              proof.data.forEach((v) => {
-                v.stmts = v.stmts.map((v) => v.replace(/\|/g, "\\|"));
-                v.reason.name = v.reason.name.replace(/\|/g, "\\|");
-              });
-              if (proof.data.length <= 0) return;
-              let maxStmtLen = Math.max(...proof.data.map((v) => v.stmts.join(newLine).length));
-              let maxReasonLen = Math.max(...proof.data.map((v, i) => joinReason(v.reason, i, false).length));
+      {
+        innerHTML: "Export paragraph",
+        value: "para"
+      },
+      {
+        innerHTML: "Export markdown",
+        value: "md"
+      }
+    ]);
+    await sleep(90);
+    switch (type) {
+      case "md": {
+        e.preventDefault();
+        let proof = clone(proofs[currentProofID]);
+        proof.data.forEach((v) => {
+          v.stmts = v.stmts.map((v) => v.replace(/\|/g, "\\|"));
+          v.reason.name = v.reason.name.replace(/\|/g, "\\|");
+        });
+        if (proof.data.length <= 0) return;
+        let maxStmtLen = Math.max(...proof.data.map((v) => v.stmts.join(newLine).length));
+        let maxReasonLen = Math.max(...proof.data.map((v, i) => joinReason(v.reason, i, false).length));
 
-              let res = `| ${proof.name}${" ".repeat(maxStmtLen + 4 - proof.name.length)}|${" ".repeat(maxReasonLen + 2)}|
+        let res = `| ${proof.name}${" ".repeat(maxStmtLen + 4 - proof.name.length)}|${" ".repeat(maxReasonLen + 2)}|
 | ${"-".repeat(maxStmtLen + 3)} | ${"-".repeat(maxReasonLen)} |\n`;
 
-              for (let i = 0; i < proof.data.length; i++) {
-                const row = proof.data[i];
-                const stmt = `${i + 1}. ${row.stmts.join(newLine)}`.padEnd(maxStmtLen + 3, " ");
-                const reason = joinReason(row.reason, i, false).padEnd(maxReasonLen, " ");
-                res += `| ${stmt} | ${reason} |\n`;
-              }
-              const gui = await openGUI();
-              const exportBox = gui.addElement(createElement("textarea"));
-              exportBox.style.fontFamily = "monospace";
-              exportBox.wrap = "off";
-              exportBox.value = res;
-              exportBox.cols = Math.min(res.split(/\n/)[0].length, 150);
-              exportBox.rows = res.split(/\n/).length;
-              exportBox.focus();
-              exportBox.select();
-              gui.addElement(createElement("br"));
-              gui.addCancel("Close");
-              break;
-            }
-            case "para": {
-              let res = "";
-              for (let i = 0; i < proofs[currentProofID].data.length; i++) {
-                const row = proofs[currentProofID].data[i];
-                if (row.reason.name == "Given") res += `We know ${joinArray(row.stmts)}. `;
-                else {
-                  const reason = joinReason(row.reason, i, true, false);
-                  res += `${paragraphStarters[i % paragraphStarters.length]} ${parseExpr(joinArray(row.stmts))} by ${reason}. `;
-                }
-              }
-              const gui = await openGUI();
-              const view = gui.addElement(createElement("div"));
-              view.wrap = "off";
-              view.innerHTML = res;
-              gui.addCancel("Close");
-              break;
-            }
+        for (let i = 0; i < proof.data.length; i++) {
+          const row = proof.data[i];
+          const stmt = `${i + 1}. ${row.stmts.join(newLine)}`.padEnd(maxStmtLen + 3, " ");
+          const reason = joinReason(row.reason, i, false).padEnd(maxReasonLen, " ");
+          res += `| ${stmt} | ${reason} |\n`;
+        }
+        const gui = await openGUI();
+        const exportBox = gui.addElement(createElement("textarea"));
+        exportBox.style.fontFamily = "monospace";
+        exportBox.wrap = "off";
+        exportBox.value = res;
+        exportBox.cols = Math.min(res.split(/\n/)[0].length, 150);
+        exportBox.rows = res.split(/\n/).length;
+        exportBox.focus();
+        exportBox.select();
+        gui.addElement(createElement("br"));
+        gui.addCancel("Close");
+        break;
+      }
+      case "para": {
+        let res = "";
+        for (let i = 0; i < proofs[currentProofID].data.length; i++) {
+          const row = proofs[currentProofID].data[i];
+          if (row.reason.name == "Given") res += `We know ${joinArray(row.stmts)}. `;
+          else {
+            const reason = joinReason(row.reason, i, true, false);
+            res += `${paragraphStarters[i % paragraphStarters.length]} ${parseExpr(joinArray(row.stmts))} by ${reason}. `;
           }
+        }
+        const gui = await openGUI();
+        const view = gui.addElement(createElement("div"));
+        view.wrap = "off";
+        view.innerHTML = res;
+        gui.addCancel("Close");
+        break;
+      }
+    }
   }
 
   addEventListener("keydown", async (e) => {
@@ -888,7 +888,7 @@ define(async function (req, exports, module, args) {
     }
   });
   Button(btns, "Export", {
-    onclick() {
+    async onclick() {
       await exportProof();
     }
   });
