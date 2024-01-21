@@ -345,7 +345,7 @@ define(async function (req, exports, module, args) {
         let res = "";
         for (let i = 0; i < proofs[currentProofID].data.length; i++) {
           const row = proofs[currentProofID].data[i];
-          if (row.reason.name == "Given") res += `We know ${joinArray(row.stmts)}. `;
+          if (row.reason.name == "Given") res += `We know ${joinArray(row.stmts.map((v) => parseExpr(v)))}. `;
           else {
             const reason = joinReason(row.reason, i, true, false);
             res += `${paragraphStarters[i % paragraphStarters.length]} ${parseExpr(joinArray(row.stmts))} by ${reason}. `;
