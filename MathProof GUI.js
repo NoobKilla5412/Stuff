@@ -540,7 +540,7 @@ define(async function (req, exports, module, args) {
           gui.addConfirm(
             ButtonRef("button", "Save", {
               onclick() {
-                proof.prove = inputs.map((v) => v.value).filter((v) => v);
+                proof.prove = inputs.map((v) => replaceSnippets(v.value)).filter((v) => v);
                 saveProofs();
                 gui.close();
               }
