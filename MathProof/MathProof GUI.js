@@ -292,10 +292,7 @@ define(async function (req, exports, module, args) {
     return res;
   }
 
-  /**
-   * @param {KeyboardEvent=} e
-   */
-  async function exportProof(e) {
+  async function exportProof() {
     let type = await menu([
       {
         innerHTML: "Export markdown",
@@ -309,7 +306,6 @@ define(async function (req, exports, module, args) {
     await sleep(90);
     switch (type) {
       case "md": {
-        e?.preventDefault();
         let proof = clone(proofs[currentProofID]);
         proof.data.forEach((v) => {
           v.stmts = v.stmts.map((v) => v.replace(/\|/g, "\\|"));
@@ -345,7 +341,7 @@ define(async function (req, exports, module, args) {
         let res = "";
         for (let i = 0; i < proofs[currentProofID].data.length; i++) {
           const row = proofs[currentProofID].data[i];
-          if (row.reason.name == "Given") res += `We know ${joinArray(row.stmts.map((v) => parseExpr(v)))}. `;
+          if (row.reason.name == "Given") res += `We know ${joinArray(row.stmts)}. `;
           else {
             // const reason = joinReason(row.reason, i, true, false);
             let paragraphStarter = paragraphStarters[i % paragraphStarters.length];
@@ -360,9 +356,11 @@ define(async function (req, exports, module, args) {
           }
         }
         const gui = await openGUI();
-        const view = gui.addElement(createElement("div"));
+        const div = gui.addElement(createElement("div"));
+        div.innerHTML = parseExpr(res);
+        const view = gui.addElement(createElement("textarea"));
         view.wrap = "off";
-        view.innerHTML = res;
+        view.value = res;
         gui.addCancel("Close");
         break;
       }
@@ -382,6 +380,7 @@ define(async function (req, exports, module, args) {
           document.body.innerHTML = "";
           writeObj(proofs[currentProofID]);
         } else if (e.key == "e") {
+          e.preventDefault();
           await exportProof();
         } else if (e.key == "i") {
           importJSON();
