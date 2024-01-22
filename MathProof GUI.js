@@ -341,10 +341,10 @@ define(async function (req, exports, module, args) {
         let res = "";
         for (let i = 0; i < proofs[currentProofID].data.length; i++) {
           const row = proofs[currentProofID].data[i];
-          if (row.reason.name == "Given") res += `We know ${joinArray(row.stmts.map((v) => parseExpr(v)))}. `;
+          if (row.reason.name == "Given") res += `We know ${joinArray(row.stmts)}. `;
           else {
-            const reason = joinReason(row.reason, i, true, false);
-            res += `${paragraphStarters[i % paragraphStarters.length]} ${parseExpr(joinArray(row.stmts))} by ${reason}. `;
+            const reason = joinReason(row.reason, i, false, false);
+            res += `${paragraphStarters[i % paragraphStarters.length]} ${joinArray(row.stmts)} by ${reason}. `;
           }
         }
         const gui = await openGUI();
