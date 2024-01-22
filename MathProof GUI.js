@@ -348,9 +348,11 @@ define(async function (req, exports, module, args) {
           }
         }
         const gui = await openGUI();
-        const view = gui.addElement(createElement("div"));
+        const div = gui.addElement(createElement("div"));
+        div.innerHTML = parseExpr(res);
+        const view = gui.addElement(createElement("textarea"));
         view.wrap = "off";
-        view.innerHTML = res;
+        view.value = res;
         gui.addCancel("Close");
         break;
       }
