@@ -292,10 +292,7 @@ define(async function (req, exports, module, args) {
     return res;
   }
 
-  /**
-   * @param {KeyboardEvent=} e
-   */
-  async function exportProof(e) {
+  async function exportProof() {
     let type = await menu([
       {
         innerHTML: "Export markdown",
@@ -309,7 +306,6 @@ define(async function (req, exports, module, args) {
     await sleep(90);
     switch (type) {
       case "md": {
-        e?.preventDefault();
         let proof = clone(proofs[currentProofID]);
         proof.data.forEach((v) => {
           v.stmts = v.stmts.map((v) => v.replace(/\|/g, "\\|"));
@@ -374,6 +370,7 @@ define(async function (req, exports, module, args) {
           document.body.innerHTML = "";
           writeObj(proofs[currentProofID]);
         } else if (e.key == "e") {
+          e.preventDefault();
           await exportProof();
         } else if (e.key == "i") {
           importJSON();
