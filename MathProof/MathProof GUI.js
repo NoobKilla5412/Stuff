@@ -343,7 +343,6 @@ define(async function (req, exports, module, args) {
           const row = proofs[currentProofID].data[i];
           if (row.reason.name == "Given") res += `We know ${joinArray(row.stmts)}. `;
           else {
-            // const reason = joinReason(row.reason, i, true, false);
             let paragraphStarter = paragraphStarters[i % paragraphStarters.length];
             for (let j = 0; j < row.reason.args.length; j++) {
               const arg = row.reason.args[j];
@@ -361,6 +360,7 @@ define(async function (req, exports, module, args) {
         const view = gui.addElement(createElement("textarea"));
         view.wrap = "off";
         view.value = res;
+        gui.addElement(createElement("br"));
         gui.addCancel("Close");
         break;
       }
