@@ -893,7 +893,7 @@ define(async function (req, exports, module, args) {
       const row = proof.data[i];
       for (let j = 0; j < row.reason.args.length; j++) {
         const reason = row.reason.args[j];
-        usedSteps.push(reason.num + (reason.segment ?? "a"));
+        usedSteps.push(reason.num + (reason.segment || "a"));
       }
     }
     if (useGUI) {
