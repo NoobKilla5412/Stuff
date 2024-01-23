@@ -570,7 +570,7 @@ define(async function (req, exports, module, args) {
     const body = table.appendChild(document.createElement("tbody"));
 
     let steps = checkSteps();
-    console.log(steps);
+    writeObj(steps);
 
     for (let i = 0; i < proof.data.length; i++) {
       const row = proof.data[i];
@@ -939,6 +939,7 @@ define(async function (req, exports, module, args) {
   Button(btns, "Check", {
     onclick() {
       checkSteps(true);
+      saveProofs();
     }
   });
   Button(btns, "Load", {
