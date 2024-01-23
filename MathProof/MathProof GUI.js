@@ -1,12 +1,12 @@
 // @ts-check
 
 define(async function (req, exports, module, args) {
-  const { Button, ButtonRef } = await req("./js/Button");
-  const { createElement } = await req("./js/HTMLUtils");
-  const { renderToString: renderMath } = await req("./js/MathUtils");
-  const { typedef, isType, checkType } = await req("./js/typeUtils");
-  const { openGUI, prompt, menu } = await req("./js/GUI");
-  const overload = await req("./js/overload");
+  const { Button, ButtonRef } = await req("../js/Button");
+  const { createElement } = await req("../js/HTMLUtils");
+  const { renderToString: renderMath } = await req("../js/MathUtils");
+  const { typedef, isType, checkType } = await req("../js/typeUtils");
+  const { openGUI, prompt, menu } = await req("../js/GUI");
+  const overload = await req("../js/overload");
 
   // localStorage.clear();
   const newLine = " $ \\\\ $ ";
@@ -348,10 +348,10 @@ define(async function (req, exports, module, args) {
               const arg = row.reason.args[j];
               if (i + 1 - arg.num >= 10) {
                 let segment = arg.segment?.toUpperCase() || "A";
-                paragraphStarter = `Recall that ${parseExpr(proofs[currentProofID].data[arg.num - 1].stmts[segment.charCodeAt(0) - 65])}, so`;
+                paragraphStarter = `Recall that ${proofs[currentProofID].data[arg.num - 1].stmts[segment.charCodeAt(0) - 65]}, so`;
               }
             }
-            res += `${paragraphStarter} ${parseExpr(joinArray(row.stmts))} by ${row.reason.name}. `;
+            res += `${paragraphStarter} ${joinArray(row.stmts)} by ${row.reason.name}. `;
           }
         }
         const gui = await openGUI();
