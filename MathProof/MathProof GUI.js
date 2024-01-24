@@ -93,6 +93,7 @@ define(async function (req, exports, module, args) {
    */
   function replaceSnippets(text) {
     return overload([text], ["string[]"], () => {
+      if (text.length == 1 && text[0] == "/prove") return [...proofs[currentProofID].prove];
       for (const key in snippets) {
         if (Object.hasOwnProperty.call(snippets, key)) {
           const value = snippets[key];
