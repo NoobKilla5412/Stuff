@@ -886,11 +886,23 @@ define(async function (req, exports, module, args) {
     // return +i;
   }
 
+  function eqArrays(arr1, arr2) {
+    if (arr1.length == arr2.length) {
+      for (let i = 0; i < arr1.length; i++) {
+        if (arr1[i] != arr2[i]) return false;
+      }
+      return true;
+    } else return false;
+  }
+
   function checkSteps(useGUI = false) {
     const proof = proofs[currentProofID];
     let usedSteps = [];
     for (let i = 0; i < proof.data.length; i++) {
       const row = proof.data[i];
+      if (eqArrays(row.stmts, proof.prove)) {
+        usedSteps.push(i + 1);
+      }
       for (let j = 0; j < row.reason.args.length; j++) {
         const reason = row.reason.args[j];
         usedSteps.push(reason.num + (reason.segment || "a"));
