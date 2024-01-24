@@ -264,8 +264,9 @@ define(async function (req, exports, module, args) {
           const element = obj[i];
           arr.push(clone(element));
         }
-        return arr;
+        return /** @type {T} */ (arr);
       } else {
+        /** @type {Record<string, any>} */
         let object = {};
         for (const key in obj) {
           if (Object.hasOwnProperty.call(obj, key)) {
@@ -273,7 +274,7 @@ define(async function (req, exports, module, args) {
             object[key] = clone(element);
           }
         }
-        return object;
+        return /** @type {T} */ (object);
       }
     } else return obj;
   }
