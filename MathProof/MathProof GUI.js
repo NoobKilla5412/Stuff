@@ -93,6 +93,7 @@ define(async function (req, exports, module, args) {
    */
   function replaceSnippets(text) {
     return overload([text], ["string[]"], () => {
+      if (text.length == 1 && text[0] == "/prove") return [...proofs[currentProofID].prove];
       for (const key in snippets) {
         if (Object.hasOwnProperty.call(snippets, key)) {
           const value = snippets[key];
@@ -270,8 +271,9 @@ define(async function (req, exports, module, args) {
           const element = obj[i];
           arr.push(clone(element));
         }
-        return arr;
+        return /** @type {T} */ (arr);
       } else {
+        /** @type {Record<string, any>} */
         let object = {};
         for (const key in obj) {
           if (Object.hasOwnProperty.call(obj, key)) {
@@ -279,7 +281,7 @@ define(async function (req, exports, module, args) {
             object[key] = clone(element);
           }
         }
-        return object;
+        return /** @type {T} */ (object);
       }
     } else return obj;
   }
@@ -577,7 +579,6 @@ define(async function (req, exports, module, args) {
     const body = table.appendChild(document.createElement("tbody"));
 
     let steps = checkSteps();
-    console.log(steps);
 
     for (let i = 0; i < proof.data.length; i++) {
       const row = proof.data[i];
@@ -893,14 +894,26 @@ define(async function (req, exports, module, args) {
     // return +i;
   }
 
+  function eqArrays(arr1, arr2) {
+    if (arr1.length == arr2.length) {
+      for (let i = 0; i < arr1.length; i++) {
+        if (arr1[i] != arr2[i]) return false;
+      }
+      return true;
+    } else return false;
+  }
+
   function checkSteps(useGUI = false) {
     const proof = proofs[currentProofID];
     let usedSteps = [];
     for (let i = 0; i < proof.data.length; i++) {
       const row = proof.data[i];
+      if (eqArrays(row.stmts, proof.prove)) {
+        usedSteps.push(i + 1);
+      }
       for (let j = 0; j < row.reason.args.length; j++) {
         const reason = row.reason.args[j];
-        usedSteps.push(reason.num + (reason.segment ?? "a"));
+        usedSteps.push(reason.num + (reason.segment || "a"));
       }
     }
     if (useGUI) {
@@ -946,6 +959,7 @@ define(async function (req, exports, module, args) {
   Button(btns, "Check", {
     onclick() {
       checkSteps(true);
+      saveProofs();
     }
   });
   Button(btns, "Load", {

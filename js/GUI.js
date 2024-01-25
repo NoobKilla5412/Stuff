@@ -1,7 +1,7 @@
 // @ts-check
 
 define(async function (req, exports, module, args) {
-  const overload = await req("./overload");
+  //const overload = await req("./overload");
   const { createElement } = await req("./HTMLUtils");
   const { ButtonRef } = await req("./Button");
 
@@ -97,14 +97,14 @@ define(async function (req, exports, module, args) {
           close();
         },
         async onClose() {
-          return new Promise((resolve) => {
+          return /** @type {Promise<void>} */(new Promise((resolve) => {
             const interval = setInterval(() => {
               if (!isOpen) {
                 clearInterval(interval);
                 resolve();
               }
             }, 100);
-          });
+          }));
         },
         get element() {
           return dialog;
