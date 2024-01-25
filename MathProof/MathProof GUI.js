@@ -185,7 +185,14 @@ define(async function (req, exports, module, args) {
       skip_char("|");
       skip_whitespace();
       skip_char(...index.toString(), ".");
-      let stmts = read_while(() => !is_char("|"));
+      let stmts = "";
+      while (!is_char("|") && s.length > 0) {
+        console.log(stmts);
+        if (is_char("\\") && s[1] == "|") {
+          s.shift();
+        }
+        stmts += s.shift();
+      }
       res.stmts = stmts.split(newLineRegex).map((v) => v.trim());
       skip_whitespace();
       skip_char("|");
