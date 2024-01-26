@@ -379,6 +379,15 @@ define(async function (req, exports, module, args) {
     }
   }
 
+  async function saveJSON() {
+    const gui = await openGUI();
+    const textarea = gui.addElement(createElement("textarea"));
+    textarea.wrap = false;
+    textarea.value = JSON.stringify(proofs[currentProofID]);
+    gui.br();
+    gui.addCancel("Close");
+  }
+
   addEventListener("keydown", async (e) => {
     try {
       if (e.ctrlKey) {
@@ -389,12 +398,7 @@ define(async function (req, exports, module, args) {
           print();
         } else if (e.key == "s") {
           e.preventDefault();
-          const gui = await openGUI();
-          const textarea = gui.addElement(createElement("textarea"));
-          textarea.wrap = false;
-          textarea.value = JSON.stringify(proofs[currentProofID]);
-          gui.br();
-          gui.addCancel("Close");
+          await saveJSON();
         } else if (e.key == "e") {
           e.preventDefault();
           await exportProof();
@@ -961,6 +965,11 @@ define(async function (req, exports, module, args) {
   Button(btns, "Import MD", {
     onclick() {
       importMD();
+    }
+  });
+  Button(btns, "Save", {
+    async onclick() {
+      await saveJSON();
     }
   });
   Button(btns, "Export", {
