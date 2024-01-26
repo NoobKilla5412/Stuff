@@ -923,21 +923,22 @@ define(async function (req, exports, module, args) {
         usedSteps.push(reason.num + (reason.segment || "a"));
       }
     }
+    usedSteps.push(proof.data.length + "a");
     if (useGUI) {
-      let unuesdSteps = [];
+      let unusedSteps = [];
       for (let i = 0; i < proof.data.length; i++) {
         const row = proof.data[i];
         row.stmts.forEach((v, j) => {
           let num = i + 1 + (String.fromCharCode(j + 65).toLowerCase() ?? "");
           if (!usedSteps.includes(num)) {
-            if (row.stmts.length > 1) unuesdSteps.push(num);
-            else unuesdSteps.push((i + 1).toString());
+            if (row.stmts.length > 1) unusedSteps.push(num);
+            else unusedSteps.push((i + 1).toString());
           }
         });
       }
       // const gui = await openGUI();
       // gui.addElement(createElement("h2", "Unused Steps"));
-      // gui.addElement(createElement("div", unuesdSteps.join("<br>")));
+      // gui.addElement(createElement("div", unusedSteps.join("<br>")));
       // gui.addCancel("Close");
     }
     return usedSteps;
