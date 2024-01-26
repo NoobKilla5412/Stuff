@@ -73,6 +73,7 @@ define(async function (req, exports, module, args) {
   const snippets = {
     "/para{}{}": "/seg{$1}\\parallel/seg{$2}",
     "/paral{}{}": "/line{$1}\\parallel/line{$2}",
+    "/supp{}{}": "$\\angle $1\\wedge\\angle $2$ are supp",
     "/cos{}{}": "\\overline{$1}\\cong\\overline{$2}",
     "/coa{}{}": "\\angle $1\\cong\\angle $2",
     "/eqa{}{}": "m\\angle $1 = m\\angle $2",
