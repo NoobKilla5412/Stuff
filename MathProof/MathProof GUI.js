@@ -930,10 +930,12 @@ define(async function (req, exports, module, args) {
         usedSteps.push(reason.num + (reason.segment || "a"));
       }
     }
-    const stmts = proof.data[proof.data.length - 1].stmts;
-    for (let i = 0; i < stmts.length; i++) {
-      console.log(proof.data.length + String.fromCharCode(i + 65).toLowerCase());
-      usedSteps.push(proof.data.length + String.fromCharCode(i + 65).toLowerCase());
+    if (proof.data.length > 0) {
+      const stmts = proof.data[proof.data.length - 1].stmts;
+      for (let i = 0; i < stmts.length; i++) {
+        console.log(proof.data.length + String.fromCharCode(i + 65).toLowerCase());
+        usedSteps.push(proof.data.length + String.fromCharCode(i + 65).toLowerCase());
+      }
     }
     if (useGUI) {
       let unusedSteps = [];
