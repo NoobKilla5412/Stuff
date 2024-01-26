@@ -62,6 +62,9 @@ define(async function (req, exports, module, args) {
           dialog.appendChild(elem);
           return elem;
         },
+        br() {
+          res.addElement(createElement("br"));
+        },
         addConfirm(elem, _options) {
           const defaultOptions = {
             close: false
@@ -97,14 +100,16 @@ define(async function (req, exports, module, args) {
           close();
         },
         async onClose() {
-          return /** @type {Promise<void>} */(new Promise((resolve) => {
-            const interval = setInterval(() => {
-              if (!isOpen) {
-                clearInterval(interval);
-                resolve();
-              }
-            }, 100);
-          }));
+          return /** @type {Promise<void>} */ (
+            new Promise((resolve) => {
+              const interval = setInterval(() => {
+                if (!isOpen) {
+                  clearInterval(interval);
+                  resolve();
+                }
+              }, 100);
+            })
+          );
         },
         get element() {
           return dialog;

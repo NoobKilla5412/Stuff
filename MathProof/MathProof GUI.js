@@ -72,6 +72,7 @@ define(async function (req, exports, module, args) {
 
   const snippets = {
     "/para{}{}": "/seg{$1}\\parallel/seg{$2}",
+    "/paral{}{}": "/line{$1}\\parallel/line{$2}",
     "/cos{}{}": "\\overline{$1}\\cong\\overline{$2}",
     "/coa{}{}": "\\angle $1\\cong\\angle $2",
     "/eqa{}{}": "m\\angle $1 = m\\angle $2",
@@ -81,6 +82,7 @@ define(async function (req, exports, module, args) {
     "/lin{}{}": "$\\angle $1\\wedge\\angle $2$ form a lin pair",
     "/cot{}{}": "\\triangle $1\\cong\\triangle $2",
     "/seg{}": "\\overline{$1}",
+    "/line{}": "\\overleftrightarrow{$1}",
     "(\\d+)/(\\d+)": "\\frac{$1}{$2}",
     "([\\w\\D]+)/([\\w\\D]+)": "\\frac{$1}{$2}",
     "{}/{}": "\\frac{$1}{$2}",
@@ -386,8 +388,12 @@ define(async function (req, exports, module, args) {
           print();
         } else if (e.key == "s") {
           e.preventDefault();
-          document.body.innerHTML = "";
-          writeObj(proofs[currentProofID]);
+          const gui = await openGUI();
+          const textarea = gui.addElement(createElement("textarea"));
+          textarea.wrap = false;
+          textarea.value = JSON.stringify(proofs[currentProofID]);
+          gui.br();
+          gui.addCancel("Close");
         } else if (e.key == "e") {
           e.preventDefault();
           await exportProof();
