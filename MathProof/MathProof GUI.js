@@ -923,11 +923,10 @@ define(async function (req, exports, module, args) {
         usedSteps.push(reason.num + (reason.segment || "a"));
       }
     }
-    for (let i = 0; i < proof.data[proof.data.length - 1].stmts.length; i++) {
-      const element = proof.data[proof.data.length - 1].stmts[i];
-      for (let j = 0; j < element.length; j++) {
-        usedSteps.push(i + String.fromCharCode(j + 65).toLowerCase());
-      }
+    const stmts = proof.data[proof.data.length - 1].stmts;
+    for (let i = 0; i < stmts.length; i++) {
+      console.log(proof.data.length + String.fromCharCode(i + 65).toLowerCase());
+      usedSteps.push(proof.data.length + String.fromCharCode(i + 65).toLowerCase());
     }
     if (useGUI) {
       let unusedSteps = [];
