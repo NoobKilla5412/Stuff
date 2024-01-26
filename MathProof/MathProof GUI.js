@@ -254,7 +254,7 @@ define(async function (req, exports, module, args) {
   async function importJSON() {
     let proof = await prompt("Enter JSON data");
     if (!proof) return;
-    proof = JSON.parse(proof);
+    proof = JSON.parse(atob(proof));
     checkType(proof, "Proof");
     proofs.push(/** @type {Proof} */ (/** @type {unknown} */ (proof)));
     currentProofID = proofs.length - 1;
@@ -382,10 +382,13 @@ define(async function (req, exports, module, args) {
   async function saveJSON() {
     const gui = await openGUI();
     const textarea = gui.addElement(createElement("textarea"));
-    textarea.wrap = false;
-    textarea.value = JSON.stringify(proofs[currentProofID]);
+    const res = btoa(JSON.stringify(proofs[currentProofID]));
+    textarea.value = res;
+    textarea.cols = Math.min(res.split(/\n/)[0].length, 150);
+    textarea.rows = 10;
     gui.br();
     gui.addCancel("Close");
+    textarea.select();
   }
 
   addEventListener("keydown", async (e) => {
