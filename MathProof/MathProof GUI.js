@@ -77,6 +77,7 @@ define(async function (req, exports, module, args) {
     "/cos{}{}": "\\overline{$1}\\cong\\overline{$2}",
     "/coa{}{}": "\\angle $1\\cong\\angle $2",
     "/eqa{}{}": "m\\angle $1 = m\\angle $2",
+    "/suma{}{}": "m\\angle $1 + m\\angle $2",
     "/perp{}{}": "\\overline{$1}\\perp\\overline{$2}",
     "/rt{}": "$\\angle $1$ is a rt $\\angle$",
     "/rtt{}": "$\\triangle $1$ is a rt $\\triangle$",
