@@ -91,7 +91,8 @@ define(async function (req, exports, module, args) {
     "([\\w\\D]+)/([\\w\\D]+)": "\\frac{$1}{$2}",
     "{}/{}": "\\frac{$1}{$2}",
     // "(?<!\\\\)\\bangles\\b": "$\\angle$'",
-    "(?<!\\\\)\\bangle\\b": "$\\angle$"
+    "(?<!\\\\)\\bangle\\b": "$\\angle$",
+    "(?<!\\\\)\\bcong\\b": "$\\cong$"
   };
 
   /**
