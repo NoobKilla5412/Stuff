@@ -321,7 +321,7 @@ define(async function (req, exports, module, args) {
         value: "para"
       }
     ]);
-    await sleep(90);
+    await sleep(140);
     switch (type) {
       case "md": {
         let proof = clone(proofs[currentProofID]);
