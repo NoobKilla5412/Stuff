@@ -530,7 +530,7 @@ define(async function (req, exports, module, args) {
     elem.appendChild(
       ButtonRef("h5", parseExpr(proof.name) || "Enter a name", {
         async onclick() {
-          proof.name = replaceSnippets(await prompt("Enter a name", proof.name));
+          proof.name = replaceSnippets([await prompt("Enter a name", proof.name)])[0];
           saveProofs();
         }
       })
