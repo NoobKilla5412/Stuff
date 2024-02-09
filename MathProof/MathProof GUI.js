@@ -94,7 +94,9 @@ define(async function (req, exports, module, args) {
     // "(?<!\\\\)\\bangles\\b": "$\\angle$'",
     "(?<!\\\\)\\bangle\\b": "$\\angle$",
     "(?<!\\\\)\\bcong\\b": "$\\cong$",
-    "->": "$\\implies$"
+    "->": "$\\implies$",
+    "||(\\w)": "$\\parallel$ $1",
+    "||": "$\\parallel$"
   };
 
   /**
@@ -295,7 +297,7 @@ define(async function (req, exports, module, args) {
     } else return obj;
   }
 
-  const paragraphStarters = ["Hence", "Thus", "Therefore"];
+  const paragraphStarters = ["Hence", "Thus", "Therefore", "So"];
 
   function joinArray(arr) {
     let res = "";
