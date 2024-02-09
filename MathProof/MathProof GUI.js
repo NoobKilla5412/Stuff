@@ -96,7 +96,7 @@ define(async function (req, exports, module, args) {
     "(?<!\\\\)\\bcong\\b": "$\\cong$",
     "->": "$\\implies$",
     "\\|\\|": "$\\parallel$",
-    "$\\\\parallel$(\\w)": "$\\parallel$ $1"
+    "\\$\\\\parallel\\$(\\w)": "$\\parallel$ $1"
   };
 
   /**
