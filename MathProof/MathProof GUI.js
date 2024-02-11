@@ -94,6 +94,7 @@ define(async function (req, exports, module, args) {
     // "(?<!\\\\)\\bangles\\b": "$\\angle$'",
     "(?<!\\\\)\\bangle\\b": "$\\angle$",
     "(?<!\\\\)\\bcong\\b": "$\\cong$",
+    "(?<!\\\\)\\bperp\\b": "$\\perp$",
     "->": "$\\implies$",
     "\\|\\|": "$\\parallel$",
     "\\$\\\\parallel\\$(\\w)": "$\\parallel$ $1"
