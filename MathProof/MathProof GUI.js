@@ -86,6 +86,7 @@ define(async function (req, exports, module, args) {
     "/rtt{}": "$\\triangle $1$ is a rt $\\triangle$",
     "/lin{}{}": "$\\angle $1\\wedge\\angle $2$ form a lin pair",
     "/cot{}{}": "\\triangle $1\\cong\\triangle $2",
+    "/simt{}{}": "\\triangle $1\\sim\\triangle $2",
     "/seg{}": "\\overline{$1}",
     "/line{}": "\\overleftrightarrow{$1}",
     "(\\d+)/(\\d+)": "\\frac{$1}{$2}",
