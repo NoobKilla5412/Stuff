@@ -71,7 +71,7 @@ define(async function (req, exports, module, args) {
   let currentProofID = +(localStorage.getItem("currentProof") ?? 0);
 
   const snippets = {
-    "/midpt{}{}": "$$1$ is the midpt of $/seg{$2}$",
+    "/midpt{}{}": "$$$1$ is the midpt of $/seg{$2}$",
     "/isosc{}": "$\\triangle $1$ is isosc",
     "/para{}{}": "/seg{$1}\\parallel/seg{$2}",
     "/paraL{}{}": "/line{$1}\\parallel/line{$2}",
