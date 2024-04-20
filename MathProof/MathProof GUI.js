@@ -89,7 +89,7 @@ define(async function (req, exports, module, args) {
     "/cot{}{}": "\\triangle $1\\cong\\triangle $2",
     "/simt{}{}": "\\triangle $1\\sim\\triangle $2",
     "/seg{}": "\\overline{$1}",
-    "/coArc{}{}": "/arc{$1}\\cong/arc{$2}",
+    "/coArc{}{}": "/arc{$1}~\\cong~/arc{$2}",
     "/arc{}": "\\stackrel{\\frown}{$1}",
     "/line{}": "\\overleftrightarrow{$1}",
     "(\\d+)/(\\d+)": "\\frac{$1}{$2}",
