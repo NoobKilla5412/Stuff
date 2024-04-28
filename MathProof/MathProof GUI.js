@@ -91,6 +91,7 @@ define(async function (req, exports, module, args) {
     "/seg{}": "\\overline{$1}",
     "/coArc{}{}": "/arc{$1}~\\cong~/arc{$2}",
     "/eqArc{}{}": "m/arc{$1}~=m/arc{$2}",
+    "/sumArc{}{}": "m/arc{$1}~+ m/arc{$2}",
     "/arc{}": "\\stackrel{\\frown}{$1}",
     "/line{}": "\\overleftrightarrow{$1}",
     "(\\d+)/(\\d+)": "\\frac{$1}{$2}",
